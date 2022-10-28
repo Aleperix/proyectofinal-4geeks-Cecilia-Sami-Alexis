@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
 export const Navbar = () => {
 	return (
@@ -18,11 +17,11 @@ export const Navbar = () => {
           
         </li>
 			</ul> */}
-			<ul class="list-group list-group-horizontal">
-  <li class="list-group-item"><a className="nav-link active" aria-current="page" href="#"> Buscar </a></li>
-  <li class="list-group-item"><a className="nav-link active" aria-current="page" href="#"> Publicar un Viaje </a></li>
-  <li class="list-group-item"><button type="button" className="btn btn-light"> Inicia Sesión </button></li>
-  <li class="list-group-item"><button type="button" className="btn btn-primary"> Regístrate </button></li>
+			<ul className="list-group list-group-horizontal">
+  <li className="list-group-item"><a className="nav-link active" aria-current="page" href="#"> Buscar </a></li>
+  <li className="list-group-item"><a className="nav-link active" aria-current="page" href="#"> Publicar un Viaje </a></li>
+  <li className="list-group-item"><button type="button" className="btn btn-light"> Inicia Sesión </button></li>
+  <li className="list-group-item"><button type="button" className="btn btn-primary"> Regístrate </button></li>
 </ul>
 
 			 

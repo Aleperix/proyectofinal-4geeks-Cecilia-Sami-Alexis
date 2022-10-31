@@ -10,6 +10,7 @@ from api.utils import APIException, generate_sitemap
 from api.models import db
 from api.routes import api
 from api.admin import setup_admin
+from flask_jwt_extended import JWTManager
 # from api.commands import setup_commands
 
 #from models import Person
@@ -32,6 +33,10 @@ db.init_app(app)
 
 # Allow CORS requests to this API
 CORS(app)
+
+# Setup the Flask-JWT-Extended extension
+app.config["JWT_SECRET_KEY"] = "vc-secret"  # Change this!
+jwt = JWTManager(app)
 
 # add the admin
 setup_admin(app)

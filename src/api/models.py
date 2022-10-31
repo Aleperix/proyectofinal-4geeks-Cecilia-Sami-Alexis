@@ -4,7 +4,7 @@ db = SQLAlchemy()
 
 class Usuarios(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    usuario = db.Column(db.String(250), unique=False, nullable=False)
+    nombre_usuario = db.Column(db.String(250), unique=False, nullable=False)
     nombre = db.Column(db.String(250), unique=False, nullable=False)
     apellido = db.Column(db.String(250), unique=False, nullable=False)
     clave = db.Column(db.String(250), unique=False, nullable=False)
@@ -12,9 +12,9 @@ class Usuarios(db.Model):
     ciudad = db.Column(db.String(250), unique=False, nullable=False)
     fecha_nacimiento = db.Column(db.Integer, unique=False, nullable=False)
     genero = db.Column(db.String(250), unique=False, nullable=False)
-    sobre_mi = db.Column(db.String(250), unique=False, nullable=False)
-    preferencias = db.Column(db.String(250), unique=False, nullable=False)
-    url_avatar = db.Column(db.String(500), unique=False, nullable=False)
+    sobre_mi = db.Column(db.String(250), unique=False, nullable=True)
+    preferencias = db.Column(db.String(250), unique=False, nullable=True)
+    url_avatar = db.Column(db.String(500), unique=False, nullable=True)
     activo = db.Column(db.Boolean(), unique=False, nullable=False)
     vehiculos = db.relationship('Vehiculos', backref='usuarios', lazy=True)
     acompanantes = db.relationship('Acompanantes', backref='usuarios', lazy=True)
@@ -25,7 +25,7 @@ class Usuarios(db.Model):
     def serialize(self):
         return {
             "id": self.id,
-            "usuario": self.usuario,
+            "nombre_usuario": self.nombre_usuario,
             "nombre": self.nombre,
             "apellido": self.apellido,
             "correo": self.correo,

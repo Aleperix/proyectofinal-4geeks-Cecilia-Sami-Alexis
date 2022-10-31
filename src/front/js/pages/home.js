@@ -4,22 +4,41 @@ import rigoImageUrl from "../../img/rigo-baby.jpg";
 import "../../styles/home.css";
 
 export const Home = () => {
-	const {store} = useContext(Context);
-	return (
-		<div className="text-center mt-5">
-			<h1>Hello Alexis!!</h1>
-			<p>
-				<img src={rigoImageUrl} />
-			</p>
-			<div className="alert alert-info">
-				{store.message || "Loading message from the backend (make sure your python backend is running)..."}
-			</div>
-			<p>
-				This boilerplate comes with lots of documentation:{" "}
-				<a href="https://github.com/4GeeksAcademy/react-flask-hello/tree/95e0540bd1422249c3004f149825285118594325/docs">
-					Read documentation
-				</a>
-			</p>
-		</div>
-	);
+  const { store, actions } = useContext(Context);
+
+  return (
+    // <div className="text-center mt-5">
+
+    <section className="bg-white text-primary p-5 text-center text-sm-start">
+      <div className="Container">
+        <div className="d-flex align-item-center justify-content-between">
+          <div>
+            <h1> Económico, ecológico y divertido. </h1>
+            <p className="lead">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            </p>
+            <button type="button" class="btn btn-primary btn-lg">
+              {" "}
+              Más información{" "}
+            </button>
+          </div>
+          <img
+            className="img-fluid w-50"
+            src="https://i.imgur.com/GkiluHM.jpg"
+            alt=""
+          />
+        </div>
+      </div>
+      <section className="bg-primary text-light p-5 bg-opacity-75">
+        <div className="Container">
+          <div className="d-md-flex justify-content-between align-items-center">
+            <h3 className="mb-3.mb-md-0"> Nuestros viajes destacados </h3>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    // </div>
+  );
 };

@@ -1,5 +1,5 @@
-import React from "react";
-import { useLocation, BrowserRouter, Route, Routes } from "react-router-dom";
+import React, {useState} from "react";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
 import ScrollToTop from "./component/scrollToTop";
 
 import { Home } from "./pages/home";
@@ -18,26 +18,19 @@ const Layout = () => {
     const basename = process.env.BASENAME || "";
     // const location = useLocation();
     // console.log(location.pathname);
-    console.log(window.location.pathname);
     return (
         <div>
             <BrowserRouter basename={basename}>
                 <ScrollToTop>
-                    {window.location.pathname != "/login" ?
-                        <Navbar />:
-                        null
-                    }
+                    <Navbar />
                     <Routes>
-                        <Route element={<Home />} path="/" />
+                        <Route element={<Home />} path="/"/>
                         <Route element={<Demo />} path="/demo" />
                         <Route element={<Single />} path="/single/:theid" />
                         <Route element={<Login />} path="/login" />
-                        <Route element={<h1>Not found!</h1>} />
+                        <Route element={<h1>No encontrado!</h1>} />
                     </Routes>
-                    {window.location.pathname != "/login" ?
-                        <Footer />:
-                        null
-                    }
+                    <Footer />
                 </ScrollToTop>
             </BrowserRouter>
         </div>

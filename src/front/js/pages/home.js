@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { Context } from "../store/appContext";
 import rigoImageUrl from "../../img/rigo-baby.jpg";
 import "../../styles/home.css";
+import { Viajes } from "../component/viajes.jsx";
 
 export const Home = () => {
   const { store, actions } = useContext(Context);
@@ -18,7 +19,7 @@ export const Home = () => {
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua.
             </p>
-            <button type="button" class="btn btn-primary btn-lg">
+            <button type="button" className="btn btn-primary btn-lg">
               {" "}
               Más información{" "}
             </button>
@@ -33,7 +34,8 @@ export const Home = () => {
       <section className="bg-primary text-light p-5 bg-opacity-75">
         <div className="Container">
           <div className="d-md-flex justify-content-between align-items-center">
-            <h3 className="mb-3.mb-md-0"> Nuestros viajes destacados </h3>
+            <h3 className="mb-3.mb-md-0 text-center"> Nuestros viajes destacados </h3>
+            <Viajes />
           </div>
         </div>
       </section>

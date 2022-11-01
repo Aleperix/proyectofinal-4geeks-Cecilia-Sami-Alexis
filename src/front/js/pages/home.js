@@ -11,7 +11,7 @@ export const Home = () => {
     // <div className="text-center mt-5">
 
     <section className="bg-white text-primary p-5 text-center text-sm-start">
-      <div className="Container">
+      <div className="container">
         <div className="d-flex align-item-center justify-content-between">
           <div>
             <h1> Económico, ecológico y divertido. </h1>

@@ -2,6 +2,7 @@ import axios from 'axios';
 
 const APIUrl = "https://3001-4geeksacade-reactflaskh-mwcruni065b.ws-us73.gitpod.io"
 const getState = ({ getStore, getActions, setStore }) => {
+
 	return {
 		store: {
 			usuario: {},
@@ -152,6 +153,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				if (response.status == 200) {
 					localStorage.setItem('token', response.data.access_token)
 					setStore({auth: true})
+					setStore({usuario: response.data.usuario})
 					return true
 				}else{
 					response = response.response
@@ -171,7 +173,15 @@ const getState = ({ getStore, getActions, setStore }) => {
 					return false
 				}
                 setStore({auth: true})
+				setStore({usuario: response.data.usuario})
+				console.log(response.data.usuario);
 				return true
+			},
+			getProfile: async (id) => {
+				const action = getActions()
+				const response = await action.getData('/api/profile/'+id, {Authorization: 'Bearer ' + localStorage.getItem('token')});
+				console.log(response.data);
+				return response.data
 			},
 			//Fin Usuarios
 

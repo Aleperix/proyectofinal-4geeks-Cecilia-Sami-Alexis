@@ -4,8 +4,6 @@ import { Context } from "../store/appContext";
 
 export const Viajes = () => {
   const { store } = useContext(Context);
-  console.log(store.listaViajes);
-  
   return (
     <div
       className="container overflow-auto position-relative"

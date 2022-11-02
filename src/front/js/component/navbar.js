@@ -16,7 +16,7 @@ export const Navbar = () => {
 		useLocation().pathname != "/login" ?
 			<nav className="navbar navbar-light bg-light">
 				<div className="container">
-					<a href="#" className="navbar-brand">Viajes Compartidos</a>
+					<Link to="/" className="navbar-brand">Viajes Compartidos</Link>
 					<div className="collapse-navbar-collapse ms-auto">
 						{store.auth ?
 						<ul className="list-unstyled d-flex my-auto text-center">

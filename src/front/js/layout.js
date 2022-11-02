@@ -26,7 +26,7 @@ const Layout = () => {
                     <Navbar />
                     <Routes>
                         <Route element={<Home />} path="/"/>
-                        <Route element={<Perfil />} path="/perfil/:theid" />
+                        <Route element={<Perfil />} path="/perfil/:id" />
                         <Route element={<Login />} path="/login" />
                         <Route element={<Viaje />} path="/vistaviajes/:id" />
                         <Route element={<NuevoViaje />} path="/nuevoviaje" />

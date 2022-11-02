@@ -5,6 +5,7 @@ import ScrollToTop from "./component/scrollToTop";
 import { Home } from "./pages/home";
 import { Login } from "./pages/login";
 import { Perfil } from "./pages/perfil";
+import { ConfPerfil } from "./pages/confperfil";
 import { Viaje } from "./pages/vistaviajes";
 import { NuevoViaje } from "./pages/nuevoviaje";
 import injectContext from "./store/appContext";
@@ -27,6 +28,7 @@ const Layout = () => {
                     <Routes>
                         <Route element={<Home />} path="/"/>
                         <Route element={<Perfil />} path="/perfil/:id" />
+                        <Route element={<ConfPerfil />} path="/confperfil/:id" />
                         <Route element={<Login />} path="/login" />
                         <Route element={<Viaje />} path="/vistaviajes/:id" />
                         <Route element={<NuevoViaje />} path="/nuevoviaje" />

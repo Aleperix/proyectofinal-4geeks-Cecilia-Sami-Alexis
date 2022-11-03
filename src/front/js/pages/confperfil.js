@@ -51,10 +51,7 @@ export const ConfPerfil = () => {
 
 
 </select>
-  {/* <div className="mb-3 form-check">
-    <input type="checkbox" className="form-check-input" id="exampleCheck1"/>
-    <label className="form-check-label" for="exampleCheck1"> Aceptar cambios </label>
-  </div> */}
+ 
 
 
 <button type="button" className="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop">

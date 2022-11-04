@@ -1,3 +1,12 @@
 /* 
     General Styles used on every website (Don't Repeat Yourself)
 */
+.colform {
+    width: "75%";
+}
+::-webkit-file-upload-button {
+    display: none;
+}
+::file-selector-button {
+    display: none;
+}

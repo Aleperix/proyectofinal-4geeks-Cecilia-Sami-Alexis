@@ -31,7 +31,7 @@ const Layout = () => {
                         <Route element={<Perfil />} path="/perfil/:id" />
                         <Route element={<ConfPerfil />} path="/confperfil/:id" />
                         <Route element={<Login />} path="/login" />
-                        <Route element={<RecupClave />} path="/recupclave"/>
+                        <Route element={<RecupClave />} path="/forgot"/>
                         <Route element={<Viaje />} path="/vistaviajes/:id" />
                         <Route element={<NuevoViaje />} path="/nuevoviaje" />
                         <Route element={<h1>No encontrado!</h1>} />

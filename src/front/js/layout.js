@@ -8,11 +8,14 @@ import { Perfil } from "./pages/perfil";
 import { ConfPerfil } from "./pages/confperfil";
 import { Viaje } from "./pages/vistaviajes";
 import { NuevoViaje } from "./pages/nuevoviaje";
+import { RecupClave } from "./pages/recupclave";
+import { CambioClave } from "./pages/cambioclave";
 import injectContext from "./store/appContext";
+
 
 import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
-import { RecupClave } from "./pages/recupclave";
+
 
 //create your first component
 const Layout = () => {
@@ -32,6 +35,7 @@ const Layout = () => {
                         <Route element={<ConfPerfil />} path="/confperfil/:id" />
                         <Route element={<Login />} path="/login" />
                         <Route element={<RecupClave />} path="/forgot"/>
+                        <Route element={<CambioClave />} path="/cambioclave"/>
                         <Route element={<Viaje />} path="/vistaviajes/:id" />
                         <Route element={<NuevoViaje />} path="/nuevoviaje" />
                         <Route element={<h1>No encontrado!</h1>} />

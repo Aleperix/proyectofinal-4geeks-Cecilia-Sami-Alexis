@@ -1,7 +1,6 @@
 import React, {useContext} from "react";
 import {Context} from "../store/appContext";
 import {Link, useLocation, useNavigate} from "react-router-dom";
-import "../../styles/recupclave.css"
 
 export const RecupClave = () => {
 	
@@ -27,7 +26,7 @@ export const RecupClave = () => {
                             </div> */}
                             <div className="mb-3">
                                 <div className="form-floating">
-                                    <input type="email" className="form-control" id="fg-correo" placeholder="micorreo" />
+                                    <input type="email" className="form-control" id="fg-correo" placeholder="micorreo" required />
                                     <label htmlFor="fg-correo"> Correo </label>
                                 </div>
                             </div>
@@ -41,7 +40,7 @@ export const RecupClave = () => {
                                 <input type="checkbox" name="checkbox" className="form-check-input" id="checkbok"/>
                                 <label className="form-check-label" for="checkbox"> Recuérdame </label>
                                 </div> */}
-                                 <button className="btn btn-primary"> Recuperar Cuenta  </button>
+                                 <button type="submit" className="btn btn-primary"> Recuperar Cuenta  </button>
 
                             {/* </div> */}
                         </form>

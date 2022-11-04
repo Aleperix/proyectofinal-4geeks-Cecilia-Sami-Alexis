@@ -28,6 +28,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				{departamento: "Tacuarembó", img: 'https://i.imgur.com/npRwouy.jpg'},
 				{departamento: "Treinta y Tres", img: 'https://i.imgur.com/fQIj3Yz.jpg'}
 			],
+			viajes: [],
       listaViajes: [
         {
           Ciudad_Salida: "Montevideo",
@@ -200,6 +201,16 @@ const getState = ({ getStore, getActions, setStore }) => {
 			//Fin Usuarios
 
 			//Inicio Viajes
+			getAllTravels: async () => {
+				const action = getActions()
+				const response = await action.getData(APIUrl+'/api/viajes');
+				if (!response.hasOwnProperty('code')) {
+					console.log(response.data);
+					setStore({viajes: response.data})
+					return response.data
+				}
+				return response.response
+            },
 			//Fin Viajes
 
 			//Inicio Acompanantes

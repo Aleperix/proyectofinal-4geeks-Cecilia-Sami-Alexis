@@ -12,8 +12,7 @@ api = Blueprint('api', __name__)
 
            ##### Inicio JWT #####
 
-# Create a route to authenticate your users and return JWTs. The
-# create_access_token() function is used to actually generate the JWT.
+#Logueamos al usuario si los datos proporcionados son correctos
 @api.route("/login", methods=["POST"])
 def login():
     nombre_usuario = request.json.get("nombre_usuario", None)
@@ -38,6 +37,7 @@ def login():
     }
     return jsonify(response_body)
 
+#Verificamos si el usuario está logueado o no
 @api.route("/isauth", methods=["GET"])
 @jwt_required()
 def is_auth():
@@ -55,6 +55,7 @@ def is_auth():
     }
     return jsonify(response_body), 200
 
+#Obtenemos los datos del perfil de un usuario
 @api.route("/profile/<int:id_usuario>", methods=["GET"])
 @jwt_required()
 def profile(id_usuario):
@@ -93,3 +94,16 @@ def profile(id_usuario):
     }
     return jsonify(response_body), 200
            ##### Fin JWT #####
+
+            ##### Inicio Viajes #####
+#Obtenemos todos los viajes
+@api.route('/viajes', methods=['GET'])
+def get_all_travels():
+    viajes = Viajes.query.all() # esto obtiene todos los registros de la tabla User
+
+    if len(viajes) == 0:
+        raise APIException('Aún no hay viajes disponibles', status_code=404)
+
+    results = list(map(lambda item: item.serialize(), viajes)) #esto serializa los datos del arrays users
+
+    return jsonify(results), 200

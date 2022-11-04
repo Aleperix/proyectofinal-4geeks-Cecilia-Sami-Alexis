@@ -23,7 +23,7 @@ export const Home = () => {
             </button>
           </div>
           <img
-            className="img-fluid w-50"
+            className="img-fluid w-50 d-none d-lg-flex d-xl-flex"
             src="https://i.imgur.com/GkiluHM.jpg"
             alt=""
           />

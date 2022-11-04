@@ -54,7 +54,7 @@ export const Perfil = () => {
 					{store.usuario.id == datosPerfil.id ?
 					<div className="mx-4 py-2 bg-secondary bg-opacity-25 border-start border-end border-secondary h-100" id="my-profile-config">
 						<div className="my-4 d-flex justify-content-center">
-							<span className="d-block m-2">Editar datos personales</span>
+							<Link className="d-block text-decoration-none m-2" to={"/confperfil/"+store.usuario.id}>Editar datos personales</Link>
 							<span className="d-block m-2">Cambiar imagen de perfil</span>
 						</div>
 					</div>
@@ -72,19 +72,19 @@ export const Perfil = () => {
 					</div>
 					<div className="mx-4 py-2 bg-secondary bg-opacity-25 border-start border-end border-secondary h-100" id="my-profile-config">
 						<div className="my-4">
-							<div className="row row justify-content-center">
-								<div className="col-4">
-									<span className="d-block m-2"><b>Usuario: </b>{datosPerfil.nombre_usuario}</span>
-									<span className="d-block m-2"><b>Nombre: </b>{datosPerfil.nombre}</span>
-									<span className="d-block m-2"><b>Apellido: </b>{datosPerfil.apellido}</span>
-									<span className="d-block m-2"><b>Correo Electrónico: </b>{datosPerfil.correo}</span>
-									<span className="d-block m-2"><b>Ciudad: </b>{datosPerfil.ciudad}</span>
+							<div className="row d-flex flex-xs-wrap flex-sm-wrap flex-md-wrap justify-content-center">
+								<div className="col-xs-6 col-sm-6 col-md-6 col-lg-4 col-xl-4">
+									<span className="d-block m-2 text-break"><b>Usuario: </b>{datosPerfil.nombre_usuario}</span>
+									<span className="d-block m-2 text-break"><b>Nombre: </b>{datosPerfil.nombre}</span>
+									<span className="d-block m-2 text-break"><b>Apellido: </b>{datosPerfil.apellido}</span>
+									<span className="d-block m-2 text-break"><b>Correo Electrónico: </b>{datosPerfil.correo}</span>
+									<span className="d-block m-2 text-break"><b>Ciudad: </b>{datosPerfil.ciudad}</span>
 								</div>
-								<div className="col-4">
-									<span className="d-block m-2"><b>Edad: </b>{edad}</span>
-									<span className="d-block m-2"><b>Género: </b>{datosPerfil.genero}</span>
-									<span className="d-block m-2"><b>Preferencias para viajar: </b>{datosPerfil.preferencias}</span>
-									<span className="d-block m-2"><b>Sobre mi: </b>{datosPerfil.acerca}</span>
+								<div className="col-xs-6 col-sm-6 col-md-6 col-lg-4 col-xl-4">
+									<span className="d-block m-2 text-break"><b>Edad: </b>{edad}</span>
+									<span className="d-block m-2 text-break"><b>Género: </b>{datosPerfil.genero}</span>
+									<span className="d-block m-2 text-break"><b>Preferencias para viajar: </b>{datosPerfil.preferencias}</span>
+									<span className="d-block m-2 text-break"><b>Sobre mi: </b>{datosPerfil.acerca}</span>
 								</div>
 							</div>
 						</div>

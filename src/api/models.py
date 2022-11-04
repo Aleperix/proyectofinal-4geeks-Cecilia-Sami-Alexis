@@ -37,7 +37,6 @@ class Usuarios(db.Model):
             "preferencias": self.preferencias,
             "url_avatar": self.url_avatar,
             "activo": self.activo,
-            # do not serialize the password, its a security breach
         }
 
 class Vehiculos(db.Model):
@@ -111,3 +110,6 @@ class Acompanantes(db.Model):
             "id_viaje": self.id_viaje,
             # do not serialize the password, its a security breach
         }
+    def serializeViajes(self):
+        viaje = Viajes.query.filter_by(id=self.id_viaje).first()
+        return viaje.serialize()

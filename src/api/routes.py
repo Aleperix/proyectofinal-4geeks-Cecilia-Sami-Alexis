@@ -75,15 +75,13 @@ def profile(id_usuario):
         viajes_conductor = {"message": 'Aún no has hecho viajes como conductor'}
     else:
         viajes_conductor = list(map(lambda item: item.serialize(), viajes_conductor))
-        
-    viajes_acompanante = Viajes.query.filter(Viajes.id == Acompanantes.id_viaje and Acompanantes.id_usuario == id_usuario).all()
-    # viajes_acompanante = Acompanantes.query.filter_by(id_usuario=id_usuario).all()
+
+    viajes_acompanante = Acompanantes.query.filter_by(id_usuario=id_usuario).all()
     if len(viajes_acompanante) == 0:
         viajes_acompanante = {"message": 'Aún no has hecho viajes como acompañante'}
     else:
-        viajes_acompanante = list(map(lambda item: item.serialize(), viajes_acompanante))
-    
-    print(vehiculos)
+        viajes_acompanante = list(map(lambda item: {**item.serializeViajes(), **item.serialize()}, viajes_acompanante))
+
     response_body = {
         "perfil": usuario.serialize(),
         "vehiculos": vehiculos,

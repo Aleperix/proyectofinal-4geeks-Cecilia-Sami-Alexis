@@ -33,7 +33,8 @@ def login():
     response_body = {
         "access_token": access_token,
         "refresh_token": refresh_token,
-        "usuario": usuario.serialize()
+        "usuario": usuario.serialize(),
+        "status": 200
     }
     return jsonify(response_body)
 
@@ -49,7 +50,8 @@ def is_auth():
         raise APIException('No tienes permitido hacer esto', status_code=401)
 
     response_body = {
-        "usuario": usuario.serialize()
+        "usuario": usuario.serialize(),
+        "status": 200
     }
     return jsonify(response_body), 200
 
@@ -60,26 +62,36 @@ def profile(id_usuario):
     usuario = Usuarios.query.filter_by(id=id_usuario).first()
 
     if usuario is None:
-        raise APIException('El usuario no ha sido encontrado', status_code=404)
+        raise APIException('El perfil que buscas no existe', status_code=404)
 
     vehiculos = Vehiculos.query.filter_by(id_usuario=id_usuario).all()
     if len(vehiculos) == 0:
-        vehiculos = {"message": 'El usuario aún no tiene vehículos'}
+        vehiculos = {"status": None}
     else:
         vehiculos = list(map(lambda item: item.serialize(), vehiculos)) #esto serializa los datos del arrays users
 
     viajes_conductor = Viajes.query.filter_by(conductor=id_usuario).all()
-    if viajes_conductor is None:
-        viajes_conductor = {"message": 'El usuario no ha hecho viajes como conductor'}
+    if len(viajes_conductor) == 0:
+        viajes_conductor = {"message": 'Aún no has hecho viajes como conductor'}
+    else:
+        viajes_conductor = list(map(lambda item: item.serialize(), viajes_conductor))
         
-    viajes_acompanante = Acompanantes.query.filter_by(id_usuario=id_usuario).all()
-    if viajes_acompanante is None:
-        viajes_acompanante = {"message": 'El usuario no ha hecho viajes como acompañante'}
-
+    viajes_acompanante = Viajes.query.filter(Viajes.id == Acompanantes.id_viaje and Acompanantes.id_usuario == id_usuario).all()
+    # viajes_acompanante = Acompanantes.query.filter_by(id_usuario=id_usuario).all()
+    if len(viajes_acompanante) == 0:
+        viajes_acompanante = {"message": 'Aún no has hecho viajes como acompañante'}
+    else:
+        viajes_acompanante = list(map(lambda item: item.serialize(), viajes_acompanante))
+    
     print(vehiculos)
     response_body = {
         "perfil": usuario.serialize(),
-        "vehiculos": vehiculos
+        "vehiculos": vehiculos,
+        "viajes":{
+            "conductor": viajes_conductor,
+            "acompanante": viajes_acompanante
+        },
+        "status": 200
     }
     return jsonify(response_body), 200
            ##### Fin JWT #####

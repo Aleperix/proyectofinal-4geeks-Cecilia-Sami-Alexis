@@ -1,5 +1,6 @@
 import React, {useContext} from "react";
 import {Context} from "../store/appContext";
+import defaultAvatarUrl from "../../img/defaultAvatar.png"
 import {Link, useLocation, useNavigate} from "react-router-dom";
 
 export const Navbar = () => {
@@ -47,13 +48,13 @@ export const Navbar = () => {
 						</li>
 						<li className="nav-item dropdown">
 							<a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-								<img className="border border-2 rounded-circle" src={store.usuario.url_avatar} width="30px" alt="Imagen de Perfil" />
+								<img className="border border-2 rounded-circle" src={store.usuario.url_avatar == null ? defaultAvatarUrl : store.usuario.url_avatar} width="30px" alt="Imagen de Perfil" />
 								<span> {store.usuario.nombre_usuario}</span>
 							</a>
 							<ul className="dropdown-menu dropdown-menu-end">
-								<li><Link className="dropdown-item" to={"/perfil/"+store.usuario.id}>Perfil</Link></li>
-								<li><a className="dropdown-item" href="#">Configuración de cuenta</a></li>
-								<li role="button" data-bs-toggle="modal" data-bs-target="#logoutadvert"><span className="dropdown-item">Cerrar Sesión</span></li>
+								<li><Link className="dropdown-item" to={"/perfil/"+store.usuario.id}><i className="fas fa-user"></i> Perfil</Link></li>
+								<li><Link className="dropdown-item" to={"/confperfil/"+store.usuario.id}><i className="fas fa-cog"></i> Configuración de cuenta</Link></li>
+								<li role="button" data-bs-toggle="modal" data-bs-target="#logoutadvert"><span className="dropdown-item"><i className="fas fa-sign-out-alt"></i> Cerrar Sesión</span></li>
 							</ul>
 						</li>						
 					</ul>}

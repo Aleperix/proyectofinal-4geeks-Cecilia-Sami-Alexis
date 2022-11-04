@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const APIUrl = "https://3001-4geeksacade-reactflaskh-mwcruni065b.ws-us73.gitpod.io"
+const APIUrl = "https://3001-4geeksacade-reactflaskh-mwcruni065b.ws-us74.gitpod.io"
 const getState = ({ getStore, getActions, setStore }) => {
 
 	return {
@@ -94,52 +94,64 @@ const getState = ({ getStore, getActions, setStore }) => {
           Activo: false,
           Acompañantes: ["Juan"],
         },
-      ]
+      ],
+	  error: null
 		},
 		actions: {
 								//	Inicio API //
 			/* POST */
-			postData: async (route, bodyData)=>{
+			postData: async (url, bodyData, headers)=>{
 				try {
-					const response = await axios.post(APIUrl+route, bodyData)
+					if (headers != null) {
+						const response = await axios.post(url, bodyData, {headers: headers})
+						return response
+					}
+					const response = await axios.post(url, bodyData)
 					return response
 				} catch (error) {
 					console.log(error);
+					setStore({error: error.response.status})
 					return error
 				}
 			},
 			/* GET */
-			getData: async (route, headers)=>{
+			getData: async (url, headers)=>{
 				try {
 					if (headers != null) {
-						const response = await axios.get(APIUrl+route, {headers: headers})
+						const response = await axios.get(url, {headers: headers})
 						return response
 					}
-					const response = await axios.get(APIUrl+route)
-					console.log(response);
+					const response = await axios.get(url)
 					return response
 				} catch (error) {
 					console.log(error);
+					setStore({error: error.response.status})
 					return error
 				}
 			},
 			/* PUT */
-			putData: async (route, bodyData)=>{
+			putData: async (url, bodyData, headers)=>{
 				try {
-					const response = await axios.put(APIUrl+route, bodyData)
+					if (headers != null) {
+						const response = await axios.put(url, bodyData, {headers: headers})
+						return response
+					}
+					const response = await axios.put(url, bodyData)
 					return response
 				} catch (error) {
 					console.log(error);
+					setStore({error: error.response.status})
 					return error
 				}
 			},
 			/* DELETE */
-			deleteData: async (route)=>{
+			deleteData: async (url)=>{
 				try {
-					const response = await axios.delete(APIUrl+route,)
+					const response = await axios.delete(url)
 					return response
 				} catch (error) {
 					console.log(error);
+					setStore({error: error.response.status})
 					return error
 				}
 			},
@@ -149,8 +161,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 			//Inicio Usuarios
 			login: async (value)  => {
 				const action = getActions()
-				let response = await action.postData('/api/login', value);
-				if (response.status == 200) {
+				let response = await action.postData(APIUrl+'/api/login', value);
+				if (!response.hasOwnProperty('code')) {
 					localStorage.setItem('token', response.data.access_token)
 					setStore({auth: true})
 					setStore({usuario: response.data.usuario})
@@ -158,7 +170,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}else{
 					response = response.response
 					setStore({auth: false})
-					return {message: response.data.message}
+					// return {message: response.data.message}
 				}
 			},
 			logout: () => {
@@ -167,21 +179,23 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			isAuth: async () => {
 				const action = getActions()
-				let response = await action.getData('/api/isauth', {Authorization: 'Bearer ' + localStorage.getItem('token')});
-				if (response.hasOwnProperty('code')){
-					setStore({auth: false})
-					return false
+				let response = await action.getData(APIUrl+'/api/isauth', {Authorization: 'Bearer ' + localStorage.getItem('token')});
+				if (!response.hasOwnProperty('code')) {
+					setStore({auth: true})
+					setStore({usuario: response.data.usuario})
+					return true
 				}
-                setStore({auth: true})
-				setStore({usuario: response.data.usuario})
-				console.log(response.data.usuario);
-				return true
+                setStore({auth: false})
+				return false
 			},
 			getProfile: async (id) => {
 				const action = getActions()
-				const response = await action.getData('/api/profile/'+id, {Authorization: 'Bearer ' + localStorage.getItem('token')});
-				console.log(response.data);
-				return response.data
+				let response = await action.getData(APIUrl+'/api/profile/'+id, {Authorization: 'Bearer ' + localStorage.getItem('token')});
+				if (!response.hasOwnProperty('code')) {
+					console.log(response.data);
+					return response.data
+				}
+				return response.response
 			},
 			//Fin Usuarios
 

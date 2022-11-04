@@ -167,7 +167,45 @@ export const Perfil = () => {
 											<td>{element.hasta}</td>
 											<td>{element.fecha}</td>
 											<td>{element.hora}</td>
-											<td>{element.vehiculo}</td>
+											<td>{vehiculos[index].modelo}</td>
+											</tr>
+									)})}
+									</tbody>
+									</table>
+								</div>
+						</div>
+						}
+						<h3 className="text-center">Como acompañante</h3>
+						{viajesAcompanante.hasOwnProperty('message') ?
+						<div className="my-1 d-flex justify-content-center">
+							<p className="m-2 d-flex justify-content center">{viajesAcompanante.message}</p>
+						</div>
+						:
+						<div className="my-4 d-flex justify-content-center">
+							<div className="table-responsive">
+								<table className="table table-striped text-center mx-5">
+									<thead>
+										<tr>
+										<th scope="col-1">#</th>
+										<th scope="col-1">Desde</th>
+										<th scope="col-1">Hasta</th>
+										<th scope="col-1">Fecha</th>
+										<th scope="col-1">Hora</th>
+										{/* <th scope="col-1">Vehículo</th> */}
+										<th scope="col-1">Conductor</th>
+										</tr>
+									</thead>
+									<tbody>
+									{viajesAcompanante.map((element, index) => {
+											return(
+											<tr key={index+1}>
+											<th scope="row">{index+1}</th>
+											<td>{element.desde}</td>
+											<td>{element.hasta}</td>
+											<td>{element.fecha}</td>
+											<td>{element.hora}</td>
+											{/* <td>{vehiculos[index].modelo}</td> */}
+											<td>{element.conductor}</td>
 											</tr>
 									)})}
 									</tbody>

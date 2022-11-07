@@ -65,12 +65,6 @@ def profile(id_usuario):
     if usuario is None:
         raise APIException('El perfil que buscas no existe', status_code=404)
 
-    vehiculos = Vehiculos.query.filter_by(id_usuario=id_usuario).all()
-    if len(vehiculos) == 0:
-        vehiculos = {"status": None}
-    else:
-        vehiculos = list(map(lambda item: item.serialize(), vehiculos)) #esto serializa los datos del arrays users
-
     viajes_conductor = Viajes.query.filter_by(conductor=id_usuario).all()
     if len(viajes_conductor) == 0:
         viajes_conductor = {"message": 'Aún no has hecho viajes como conductor'}
@@ -85,7 +79,6 @@ def profile(id_usuario):
 
     response_body = {
         "perfil": usuario.serialize(),
-        "vehiculos": vehiculos,
         "viajes":{
             "conductor": viajes_conductor,
             "acompanante": viajes_acompanante
@@ -107,3 +100,34 @@ def get_all_travels():
     results = list(map(lambda item: item.serialize(), viajes)) #esto serializa los datos del arrays users
 
     return jsonify(results), 200
+
+#Creamos un nuevo viaje
+@api.route('/viajes/new', methods=['POST'])
+@jwt_required()
+def add_new_travel():
+    body = json.loads(request.data)
+
+    for i in body:
+        if body[i] == None:
+            raise APIException('Hay campos vacíos', status_code=204)
+    
+    
+    new_travel = Viajes(
+        acerca=body["acerca"],
+        conductor=body["conductor"],
+        vehiculo=body["vehiculo"],
+        desde=body["desde"],
+        hasta=body["hasta"],
+        fecha=body["fecha"],
+        hora=body["hora"],
+        asientos_disponibles=body["asientos_disponibles"],
+        costo_asiento_uy=body["costo_asiento_uy"],
+        activo=1)
+
+    db.session.add(new_travel)
+    db.session.commit()
+    response_body = {
+        "message": "Viaje creado con éxito",
+        "status": 200
+    }
+    return jsonify(response_body), 200

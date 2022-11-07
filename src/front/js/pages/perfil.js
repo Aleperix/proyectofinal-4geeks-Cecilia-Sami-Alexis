@@ -7,7 +7,6 @@ import { Context } from "../store/appContext";
 export const Perfil = () => {
 	const {store, actions} = useContext(Context);
 	const [datosPerfil, setDatosPerfil] = useState("");
-	const [vehiculos, setVehiculos] = useState([]);
 	const [viajesConductor, setViajesConductor] = useState([]);
 	const [viajesAcompanante, setViajesAcompanante] = useState([]);
 	const [edad, setEdad] = useState("");
@@ -23,7 +22,6 @@ export const Perfil = () => {
 		if (response.status == 200){
 			const edad = getAge(String(response.perfil.fecha_nacimiento))
 			setDatosPerfil(response.perfil, {status: response.status})
-			setVehiculos(response.vehiculos)
 			setViajesConductor(response.viajes.conductor)
 			setViajesAcompanante(response.viajes.acompanante)
 			setEdad(edad)
@@ -36,13 +34,7 @@ export const Perfil = () => {
 	
 	function getAge(fechaNac) {
 		let hoy = new Date();
-		let miFecha
-		if (fechaNac.length == 8){
-			miFecha = fechaNac.substring(4, 8)+"/"+fechaNac.substring(2, 4)+"/"+fechaNac.substring(0, 2)
-		}else{
-			miFecha = fechaNac.substring(3, 7)+"/"+fechaNac.substring(1, 3)+"/0"+fechaNac.substring(0, 1)
-		}
-		let fechaNacUsr = new Date(miFecha);
+		let fechaNacUsr = new Date(fechaNac);
 		let edad = hoy.getFullYear() - fechaNacUsr.getFullYear();
 		let m = hoy.getMonth() - fechaNacUsr.getMonth();
 		if (m < 0 || (m === 0 && hoy.getDate() < fechaNacUsr.getDate())) {
@@ -54,7 +46,7 @@ export const Perfil = () => {
 	const tabClick = (e) =>{
 		if (e == remoteAvatarTab.current) {
 			setlocalTab(true)
-	  	}else{
+	  	}else if(e == localAvatarTab.current){
 		  	setlocalTab(false)
 	  	}
 	}
@@ -91,7 +83,7 @@ export const Perfil = () => {
 							<img className="my-2 border border-2 rounded-circle" data-bs-toggle="modal" data-bs-target="#changeProfileImage" onClick={() => tabClick(remoteAvatarTab.current)} src={datosPerfil.url_avatar == null ? defaultAvatarUrl : store.usuario.url_avatar} width="10%" role="button" alt="Imagen de Perfil" />
 							</>
 						: 
-							<img className="my-2 border border-2 rounded-circle" src={datosPerfil.url_avatar == null ? defaultAvatarUrl : store.usuario.url_avatar} width="10%" alt="Imagen de Perfil" />
+							<img className="my-2 border border-2 rounded-circle" src={datosPerfil.url_avatar == null ? defaultAvatarUrl : datosPerfil.url_avatar} width="10%" alt="Imagen de Perfil" />
 						}
 					</div>
 					{store.usuario.id == datosPerfil.id ?
@@ -159,7 +151,7 @@ export const Perfil = () => {
 										</tr>
 									</thead>
 									<tbody>
-									{viajesConductor.map((element, index) => {
+									{viajesConductor? viajesConductor.map((element, index) => {
 											return(
 											<tr key={index+1}>
 											<th scope="row">{index+1}</th>
@@ -167,9 +159,9 @@ export const Perfil = () => {
 											<td>{element.hasta}</td>
 											<td>{element.fecha}</td>
 											<td>{element.hora}</td>
-											<td>{vehiculos[index].modelo}</td>
+											<td>{datosPerfil.vehiculos[index].modelo}</td>
 											</tr>
-									)})}
+									)}):null}
 									</tbody>
 									</table>
 								</div>
@@ -223,7 +215,7 @@ export const Perfil = () => {
 						<i className="h4 fas fa-space-shuttle"></i>
 					</div>
 					<div className="mb-2 mx-4 py-2 bg-secondary bg-opacity-25 rounded-bottom border-start border-end border-bottom border-secondary h-100" id="my-profile-config">
-						{vehiculos.hasOwnProperty('status') ?
+						{datosPerfil.vehiculos.hasOwnProperty('status') ?
 						<div className="my-4 d-flex justify-content-center">
 							<p className="d-block m-2 d-flex justify-content center">{store.usuario.id == datosPerfil.id ? "Aún no tienes vehículos" : "El usuario aún no tiene vehículos"}</p>
 						</div>
@@ -240,7 +232,7 @@ export const Perfil = () => {
 											</tr>
 										</thead>
 										<tbody>
-										{vehiculos.map((element, index) => {
+										{datosPerfil.vehiculos.map((element, index) => {
 											return(
 											<tr key={index+1}>
 											<th scope="row">{index+1}</th>
@@ -280,7 +272,7 @@ export const Perfil = () => {
 											</div>
 										</div>
 										:
-										<div className="tab-pane fade" id="remoteImageUpload" role="tabpanel" aria-labelledby="remoteImageUpload-tab">
+										<div className="tab-pane fade show active" id="remoteImageUpload" role="tabpanel" aria-labelledby="remoteImageUpload-tab">
 											<div className="input-group mb-3">
 												<label className="input-group-text" htmlFor="inputLink"><i className="fas fa-link"></i></label>
 												<input type="text" className="form-control" ref={avatarUrl} id="inputLink" placeholder="Ingresa la URL de la imagen"/>

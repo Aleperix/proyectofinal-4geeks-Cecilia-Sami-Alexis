@@ -1,10 +1,12 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import { Context } from "../store/appContext";
 
 export const Viajes = () => {
 	const { store } = useContext(Context);
+	const [showModal, setShowModal] = useState(false)
 	return (
+		<>
 		<div className="container overflow-auto position-relative">
 			<div className="card ">
 				<ul className="list-group list-group-flush">
@@ -33,10 +35,11 @@ export const Viajes = () => {
 				</ul>
 			</div>
 			<div className="position-sticky bottom-0 d-flex">
-				<Link className="btn btn-primary me-md-2 ms-auto m-1" type="button" to="/nuevoviaje" style={{ width: "fitContent" }}>
+				<button className="btn btn-primary me-md-2 ms-auto m-1" type="button" data-bs-toggle="modal" data-bs-target="#postTravel">
 					Publicar Viaje
-				</Link>
+				</button>
 			</div>
 		</div>
+		</>
 	);
 };

@@ -71,7 +71,6 @@ export const Perfil = () => {
 	useEffect(() => {
 		getProfileData(profileid.id)
 	}, []);
-	console.log(datosPerfil.vehiculos);
 	return (
 		<>
 		{store.auth ?

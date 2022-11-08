@@ -4,6 +4,7 @@ import ScrollToTop from "./component/scrollToTop";
 
 import { Home } from "./pages/home";
 import { Login } from "./pages/login";
+import { Registro } from "./pages/registro";
 import { Perfil } from "./pages/perfil";
 import { ConfPerfil } from "./pages/confperfil";
 import { Viaje } from "./pages/viaje";
@@ -34,6 +35,7 @@ const Layout = () => {
                         <Route element={<Perfil />} path="/perfil/:id" />
                         <Route element={<ConfPerfil />} path="/confperfil/:id" />
                         <Route element={<Login />} path="/login" />
+                        <Route element={<Registro />} path="/register" />
                         <Route element={<RecupClave />} path="/forgot"/>
                         <Route element={<CodigoClave />} path="/passcode"/>
                         <Route element={<CambioClave />} path="/changepass"/>

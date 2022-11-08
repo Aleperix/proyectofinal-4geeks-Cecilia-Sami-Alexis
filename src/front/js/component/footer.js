@@ -3,7 +3,7 @@ import {Link, useLocation} from "react-router-dom";
 
 export const Footer = () => {
 	return (
-		useLocation().pathname != "/login" ?
+		useLocation().pathname != "/login" ? useLocation().pathname != "/register" ?
 			<footer className="footer">
 				<div className="row d-flex justify-content-center flex-xs-wrap flex-sm-wrap flex-md-wrap px-5 pt-5 bg-light text-primary">
 					<div className="col mt-2">
@@ -29,6 +29,8 @@ export const Footer = () => {
 						<p className="text-xs-start text-sm-start text-md-center text-lg-center text-xl-center mt-4">Made with <i className="fa fa-heart text-danger"/> by Alexis, Cecilia & Sami.</p>
 				</div>
 			</footer>
+		:
+		false
 		:
 		false
 	);

@@ -2,6 +2,7 @@ import React, {useContext} from "react";
 import {Context} from "../store/appContext";
 import defaultAvatarUrl from "../../img/defaultAvatar.png"
 import {Link, useLocation, useNavigate} from "react-router-dom";
+import { NuevoViaje } from "./nuevoviaje";
 
 export const Navbar = () => {
 	const navigate = useNavigate()
@@ -18,7 +19,7 @@ export const Navbar = () => {
 		<>
 		<nav className="navbar navbar-expand-lg navbar-expand-xl navbar-light bg-light">
 			<div className="container">
-				<Link className="navbar-brand" to="/">Viajes Colaborativos</Link>
+				<Link className="navbar-brand" to="/">{store.siteName}</Link>
 				<button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
 					<span className="navbar-toggler-icon"></span>
 				</button>
@@ -40,11 +41,11 @@ export const Navbar = () => {
 					</ul>
 						:
 					<ul className="navbar-nav ms-auto">
-						<li className="nav-item">
+						{/* <li className="nav-item">
 							<Link className="nav-link active text-secondary" aria-current="page" to="/search">Buscar</Link>
-						</li>
+						</li> */}
 						<li className="nav-item">
-							<Link className="nav-link active text-secondary" aria-current="page" to="/nuevoviaje">Publicar un Viaje</Link>
+							<span className="nav-link active text-secondary" aria-current="page" data-bs-toggle="modal" data-bs-target="#postTravel" role="button">Publicar un Viaje</span>
 						</li>
 						<li className="nav-item dropdown">
 							<a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -77,6 +78,7 @@ export const Navbar = () => {
 			</div>
 		</div>
 	</div>
+	<NuevoViaje />
 	</>
 		:
 		false

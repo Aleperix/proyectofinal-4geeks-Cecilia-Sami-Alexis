@@ -25,10 +25,7 @@ class Usuarios(db.Model):
 
     def serialize(self):
         vehiculos = Vehiculos.query.filter_by(id_usuario=self.id).all()
-        if len(vehiculos) == 0:
-            vehiculos = {"status": None}
-        else:
-            vehiculos = list(map(lambda item: item.serialize(), vehiculos))
+        vehiculos = list(map(lambda item: item.serialize(), vehiculos))
         return {
             "id": self.id,
             "nombre_usuario": self.nombre_usuario,

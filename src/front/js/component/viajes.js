@@ -19,7 +19,7 @@ export const Viajes = () => {
 											{element.desde} <i className="fas fa-chevron-right"></i> {element.hasta}
 										</div>
 										<div className="d-flex align-items-center justify-content-start justify-content-sm-start justify-content-md-start col-12 col-sm-12 col-md-6 col-lg-2 col-xl-2">
-											<i className="fas fa-calendar-alt"></i> {String(element.fecha).substring(0, 2)+"/"+String(element.fecha).substring(2, 4)+"/"+String(element.fecha).substring(4, 8)}
+											<i className="fas fa-calendar-alt"></i> {String(element.fecha).substring(6, 8)+"/"+String(element.fecha).substring(4, 6)+"/"+String(element.fecha).substring(0, 4)}
 										</div>
 										<div className="d-flex align-items-center justify-content-start justify-content-sm-start justify-content-md-start col-12 col-sm-12 col-md-6 col-lg-2 col-xl-2">
 											<i className="fas fa-clock"></i> {String(element.hora).substring(0, 2)+":"+String(element.hora).substring(2, 4)}

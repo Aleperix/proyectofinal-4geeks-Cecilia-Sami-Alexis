@@ -34,7 +34,8 @@ export const Perfil = () => {
 	
 	function getAge(fechaNac) {
 		let hoy = new Date();
-		let fechaNacUsr = new Date(fechaNac);
+		let miFecha = fechaNac.substring(0, 2)+"-"+fechaNac.substring(2, 4)+"-"+fechaNac.substring(4, 8)
+		let fechaNacUsr = new Date(miFecha);
 		let edad = hoy.getFullYear() - fechaNacUsr.getFullYear();
 		let m = hoy.getMonth() - fechaNacUsr.getMonth();
 		if (m < 0 || (m === 0 && hoy.getDate() < fechaNacUsr.getDate())) {
@@ -70,6 +71,7 @@ export const Perfil = () => {
 	useEffect(() => {
 		getProfileData(profileid.id)
 	}, []);
+	console.log(datosPerfil.vehiculos);
 	return (
 		<>
 		{store.auth ?
@@ -151,7 +153,7 @@ export const Perfil = () => {
 										</tr>
 									</thead>
 									<tbody>
-									{viajesConductor? viajesConductor.map((element, index) => {
+									{viajesConductor.map((element, index) => {
 											return(
 											<tr key={index+1}>
 											<th scope="row">{index+1}</th>
@@ -159,9 +161,9 @@ export const Perfil = () => {
 											<td>{element.hasta}</td>
 											<td>{element.fecha}</td>
 											<td>{element.hora}</td>
-											<td>{datosPerfil.vehiculos[index].modelo}</td>
+											<td></td>
 											</tr>
-									)}):null}
+									)})}
 									</tbody>
 									</table>
 								</div>
@@ -215,7 +217,7 @@ export const Perfil = () => {
 						<i className="h4 fas fa-space-shuttle"></i>
 					</div>
 					<div className="mb-2 mx-4 py-2 bg-secondary bg-opacity-25 rounded-bottom border-start border-end border-bottom border-secondary h-100" id="my-profile-config">
-						{datosPerfil.vehiculos.hasOwnProperty('status') ?
+						{datosPerfil?.vehiculos?.length === 0 ?
 						<div className="my-4 d-flex justify-content-center">
 							<p className="d-block m-2 d-flex justify-content center">{store.usuario.id == datosPerfil.id ? "Aún no tienes vehículos" : "El usuario aún no tiene vehículos"}</p>
 						</div>
@@ -232,7 +234,7 @@ export const Perfil = () => {
 											</tr>
 										</thead>
 										<tbody>
-										{datosPerfil.vehiculos.map((element, index) => {
+										{datosPerfil.vehiculos?.map((element, index) => {
 											return(
 											<tr key={index+1}>
 											<th scope="row">{index+1}</th>

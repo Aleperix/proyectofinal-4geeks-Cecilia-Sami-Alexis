@@ -1,6 +1,5 @@
 import axios from "axios";
 
-const APIUrl = "https://3001-4geeksacade-reactflaskh-mwcruni065b.ws-us74.gitpod.io";
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
@@ -32,7 +31,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			error: null,
 		},
 		actions: {
-			//	Inicio API //
+							//	Inicio API //
 			/* POST */
 			postData: async (url, bodyData, headers) => {
 				try {
@@ -89,12 +88,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 					return error;
 				}
 			},
-			//	Fin API //
+							//	Fin API //
 
 			//Inicio Usuarios
 			login: async (value) => {
 				const action = getActions();
-				let response = await action.postData(APIUrl + "/api/login", value);
+				let response = await action.postData(process.env.API_URL + "/api/login", value);
 				if (!response.hasOwnProperty("code")) {
 					localStorage.setItem("token", response.data.access_token);
 					setStore({ auth: true });
@@ -112,7 +111,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			isAuth: async () => {
 				const action = getActions();
-				let response = await action.getData(APIUrl + "/api/isauth", { Authorization: "Bearer " + localStorage.getItem("token") });
+				let response = await action.getData(process.env.API_URL + "/api/isauth", { Authorization: "Bearer " + localStorage.getItem("token") });
 				if (!response.hasOwnProperty("code")) {
 					setStore({ auth: true });
 					setStore({ usuario: response.data.usuario });
@@ -123,7 +122,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			getProfile: async (id) => {
 				const action = getActions();
-				let response = await action.getData(APIUrl + "/api/profile/" + id, { Authorization: "Bearer " + localStorage.getItem("token") });
+				let response = await action.getData(process.env.API_URL + "/api/profile/" + id, { Authorization: "Bearer " + localStorage.getItem("token") });
 				if (!response.hasOwnProperty("code")) {
 					return response.data;
 				}
@@ -134,7 +133,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			//Inicio Viajes
 			getAllTravels: async () => {
 				const action = getActions();
-				const response = await action.getData(APIUrl + "/api/viajes");
+				const response = await action.getData(process.env.API_URL + "/api/viajes");
 				if (!response.hasOwnProperty("code")) {
 					setStore({ viajes: response.data });
 					return response.data;
@@ -144,7 +143,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			postTravel: async (value) => {
 				console.log(value);
 				const action = getActions();
-				let response = await action.postData(APIUrl + "/api/viajes/new", value, { Authorization: "Bearer " + localStorage.getItem("token") });
+				let response = await action.postData(process.env.API_URL + "/api/viajes/new", value, { Authorization: "Bearer " + localStorage.getItem("token") });
 				if (!response.hasOwnProperty("code")) {
 					action.getAllTravels()
 					return true;

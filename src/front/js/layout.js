@@ -12,12 +12,14 @@ import { RecupClave } from "./pages/recupclave";
 import { CodigoClave } from "./pages/codigoclave";
 import { CambioClave } from "./pages/cambioclave";
 import { Nosotros } from "./pages/nosotros";
+import { Preguntas } from "./pages/preguntas";
 import injectContext from "./store/appContext";
 
 
 
 import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
+
 
 
 //create your first component
@@ -43,6 +45,7 @@ const Layout = () => {
                         <Route element={<CambioClave />} path="/changepass"/>
                         <Route element={<Nosotros />} path="/nosotros"/>
                         <Route element={<Viaje />} path="/viaje/:id" />
+                        <Route element={<Preguntas />} path="/preguntas"/>
                         <Route element={<h1>No encontrado!</h1>} />
                         
                     </Routes>

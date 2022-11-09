@@ -35,7 +35,7 @@ def login():
         "usuario": usuario.serialize(),
         "status": 200
     }
-    return jsonify(response_body)
+    return jsonify(response_body), 200
 
 #Verificamos si el usuario está logueado o no
 @api.route("/isauth", methods=["GET"])

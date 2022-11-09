@@ -88,7 +88,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			//Inicio Usuarios
 			login: async (value) => {
 				const action = getActions();
-				let response = await action.postData(process.env.API_URL + "/api/login", value);
+				let response = await action.postData(process.env.BACKEND_URL + "/api/login", value);
 				if (!response.hasOwnProperty("code")) {
 					localStorage.setItem("token", response.data.access_token);
 					setStore({ auth: true });
@@ -106,7 +106,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			isAuth: async () => {
 				const action = getActions();
-				let response = await action.getData(process.env.API_URL + "/api/isauth", { Authorization: "Bearer " + localStorage.getItem("token") });
+				let response = await action.getData(process.env.BACKEND_URL + "/api/isauth", { Authorization: "Bearer " + localStorage.getItem("token") });
 				if (!response.hasOwnProperty("code")) {
 					setStore({ auth: true });
 					setStore({ usuario: response.data.usuario });
@@ -117,18 +117,28 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			getProfile: async (id) => {
 				const action = getActions();
-				let response = await action.getData(process.env.API_URL + "/api/profile/" + id, { Authorization: "Bearer " + localStorage.getItem("token") });
+				let response = await action.getData(process.env.BACKEND_URL + "/api/profile/" + id, { Authorization: "Bearer " + localStorage.getItem("token") });
 				if (!response.hasOwnProperty("code")) {
 					return response.data;
 				}
 				return response.response;
+			},
+			register: async (value) => {
+				const action = getActions();
+				let response = await action.postData(process.env.BACKEND_URL + "/api/register", value);
+				if (!response.hasOwnProperty("code")) {
+					return true;
+				} else {
+					response = response.response;
+					return {message: response.data.message}
+				}
 			},
 			//Fin Usuarios
 
 			//Inicio Viajes
 			getAllTravels: async () => {
 				const action = getActions();
-				const response = await action.getData(process.env.API_URL + "/api/viajes");
+				const response = await action.getData(process.env.BACKEND_URL + "/api/viajes");
 				if (!response.hasOwnProperty("code")) {
 					setStore({ viajes: response.data });
 					return response.data;
@@ -138,7 +148,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			postTravel: async (value) => {
 				console.log(value);
 				const action = getActions();
-				let response = await action.postData(process.env.API_URL + "/api/viajes/new", value, { Authorization: "Bearer " + localStorage.getItem("token") });
+				let response = await action.postData(process.env.BACKEND_URL + "/api/viajes/new", value, { Authorization: "Bearer " + localStorage.getItem("token") });
 				if (!response.hasOwnProperty("code")) {
 					action.getAllTravels()
 					return true;

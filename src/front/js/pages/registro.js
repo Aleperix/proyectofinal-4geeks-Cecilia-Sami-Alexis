@@ -16,7 +16,7 @@ export const Registro = () => {
 	const [fechaNac, setFechaNac] = useState("");
 	const [genero, setGenero] = useState("");
 	const [validateForm, setValidateForm] = useState(false);
-	// const [loginError, setLoginError] = useState("");
+	const [loginError, setLoginError] = useState("");
 	// const navigate = useNavigate();
 	// const mostrarAlert = useRef("");
 
@@ -26,24 +26,26 @@ export const Registro = () => {
 		}else{
 			setValidateForm(true)
 		}
-		// 	let onLogged = await actions.login({ nombre_usuario: usuario, clave: clave });
-		// 	if (usuario == "" || clave == "") {
-		// 		setTimeout(() => {
-		// 			mostrarAlert.current.classList.add("d-none");
-		// 		}, 3000);
-		// 		mostrarAlert.current.classList.remove("d-none");
-		// 		setLoginError("Hay campos vacíos");
-		// 	} else if (onLogged == true) {
-		// 		navigate("/");
-		// 		setUsuario("");
-		// 		setClave("");
-		// 	} else {
-		// 		setTimeout(() => {
-		// 			mostrarAlert.current.classList.add("d-none");
-		// 		}, 3000);
-		// 		mostrarAlert.current.classList.remove("d-none");
-		// 		setLoginError(onLogged.message);
-		// 	}
+		let registered = await actions.register({ 
+			nombre: nombre, 
+			apellido: apellido, 
+			nombre_usuario: usuario, 
+			clave: clave, 
+			correo: correo, 
+			departamento: departamento, 
+			ciudad: ciudad, 
+			fecha_nacimiento: fechaNac, 
+			genero: genero
+		});
+			if (registered == true) {
+				navigate("/");
+			} else {
+				setTimeout(() => {
+					mostrarAlert.current.classList.add("d-none");
+				}, 3000);
+				mostrarAlert.current.classList.remove("d-none");
+				setLoginError(registered.message);
+			}
 	};
 
 	return (

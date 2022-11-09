@@ -11,11 +11,13 @@ import { Viaje } from "./pages/viaje";
 import { RecupClave } from "./pages/recupclave";
 import { CodigoClave } from "./pages/codigoclave";
 import { CambioClave } from "./pages/cambioclave";
+import { Preguntas } from "./pages/preguntas";
 import injectContext from "./store/appContext";
 
 
 import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
+
 
 
 //create your first component
@@ -40,6 +42,7 @@ const Layout = () => {
                         <Route element={<CodigoClave />} path="/passcode"/>
                         <Route element={<CambioClave />} path="/changepass"/>
                         <Route element={<Viaje />} path="/viaje/:id" />
+                        <Route element={<Preguntas />} path="/preguntas"/>
                         <Route element={<h1>No encontrado!</h1>} />
                     </Routes>
                     <Footer />

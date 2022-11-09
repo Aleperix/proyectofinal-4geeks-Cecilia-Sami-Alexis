@@ -28,7 +28,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 				{ departamento: "Treinta y Tres", img: "https://i.imgur.com/fQIj3Yz.jpg" },
 			],
 			viajes: [],
-			error: null,
 		},
 		actions: {
 							//	Inicio API //
@@ -43,7 +42,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 					return response;
 				} catch (error) {
 					console.log(error);
-					setStore({ error: error.response.status });
 					return error;
 				}
 			},
@@ -58,7 +56,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 					return response;
 				} catch (error) {
 					console.log(error);
-					setStore({ error: error.response.status });
 					return error;
 				}
 			},
@@ -73,7 +70,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 					return response;
 				} catch (error) {
 					console.log(error);
-					setStore({ error: error.response.status });
 					return error;
 				}
 			},
@@ -84,7 +80,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 					return response;
 				} catch (error) {
 					console.log(error);
-					setStore({ error: error.response.status });
 					return error;
 				}
 			},

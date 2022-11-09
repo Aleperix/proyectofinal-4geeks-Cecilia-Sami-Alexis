@@ -74,7 +74,7 @@ export const Perfil = () => {
 	return (
 		<>
 		{store.auth ?
-		store.error !== 404 ?
+		datosPerfil.status !== 404 ?
 			<div className="container">
 				<div className="mt-5 mx-5" id="profile">
 					<div className="container bg-light bg-opacity-25 rounded border border-secondary d-flex justify-content-between align-items-center">

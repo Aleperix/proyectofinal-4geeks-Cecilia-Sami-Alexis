@@ -15,7 +15,7 @@ export const Navbar = () => {
 		}
 	}
 	return (
-		useLocation().pathname != "/login" ?
+		useLocation().pathname != "/login" ? useLocation().pathname != "/register" ?
 		<>
 		<nav className="navbar navbar-expand-lg navbar-expand-xl navbar-light bg-light">
 			<div className="container">
@@ -80,6 +80,8 @@ export const Navbar = () => {
 	</div>
 	<NuevoViaje />
 	</>
+		:
+		false
 		:
 		false
 	);

@@ -9,6 +9,7 @@ class Usuarios(db.Model):
     apellido = db.Column(db.String(250), unique=False, nullable=False)
     clave = db.Column(db.String(250), unique=False, nullable=False)
     correo = db.Column(db.String(250), unique=False, nullable=False)
+    departamento = db.Column(db.String(250), unique=False, nullable=False)
     ciudad = db.Column(db.String(250), unique=False, nullable=False)
     fecha_nacimiento = db.Column(db.Integer, unique=False, nullable=False)
     genero = db.Column(db.String(250), unique=False, nullable=False)
@@ -32,6 +33,7 @@ class Usuarios(db.Model):
             "nombre": self.nombre,
             "apellido": self.apellido,
             "correo": self.correo,
+            "departamento": self.departamento,
             "ciudad": self.ciudad,
             "fecha_nacimiento": self.fecha_nacimiento,
             "genero": self.genero,

@@ -88,6 +88,41 @@ def profile(id_usuario):
     return jsonify(response_body), 200
            ##### Fin JWT #####
 
+           ##### Inicio Usuarios #####
+#Creamos un nuevo viaje
+@api.route('/register', methods=['POST'])
+def add_new_user():
+    body = json.loads(request.data)
+
+    for i in body:
+        if body[i] == None:
+            raise APIException('Hay campos vacíos', status_code=204)
+    
+    
+    new_user = Usuarios(
+        nombre_usuario=body["nombre_usuario"],
+        nombre=body["nombre"],
+        apellido=body["apellido"],
+        clave=body["clave"],
+        correo=body["correo"],
+        departamento=body["departamento"],
+        ciudad=body["ciudad"],
+        fecha_nacimiento=body["fecha_nacimiento"],
+        genero=body["genero"],
+        sobre_mi=None,
+        preferencias=None,
+        url_avatar=None,
+        activo=1)
+
+    db.session.add(new_user)
+    db.session.commit()
+    response_body = {
+        "message": "Usuario creado con éxito",
+        "status": 200
+    }
+    return jsonify(response_body), 200
+           ##### Fin Usuarios #####
+
             ##### Inicio Viajes #####
 #Obtenemos todos los viajes
 @api.route('/viajes', methods=['GET'])
@@ -131,3 +166,4 @@ def add_new_travel():
         "status": 200
     }
     return jsonify(response_body), 200
+           ##### Fin Viajes #####

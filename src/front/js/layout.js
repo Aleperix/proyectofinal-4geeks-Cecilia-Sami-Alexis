@@ -11,8 +11,10 @@ import { Viaje } from "./pages/viaje";
 import { RecupClave } from "./pages/recupclave";
 import { CodigoClave } from "./pages/codigoclave";
 import { CambioClave } from "./pages/cambioclave";
+import { Nosotros } from "./pages/nosotros";
 import { Preguntas } from "./pages/preguntas";
 import injectContext from "./store/appContext";
+
 
 
 import { Navbar } from "./component/navbar";
@@ -41,9 +43,11 @@ const Layout = () => {
                         <Route element={<RecupClave />} path="/forgot"/>
                         <Route element={<CodigoClave />} path="/passcode"/>
                         <Route element={<CambioClave />} path="/changepass"/>
+                        <Route element={<Nosotros />} path="/nosotros"/>
                         <Route element={<Viaje />} path="/viaje/:id" />
                         <Route element={<Preguntas />} path="/preguntas"/>
                         <Route element={<h1>No encontrado!</h1>} />
+                        
                     </Routes>
                     <Footer />
                 </ScrollToTop>

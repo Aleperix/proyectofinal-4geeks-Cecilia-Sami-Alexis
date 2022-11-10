@@ -17,7 +17,7 @@ api = Blueprint('api', __name__)
 def login():
     nombre_usuario = request.json.get("nombre_usuario", None)
     clave = request.json.get("clave", None)
-
+    print(nombre_usuario)
     usuario = Usuarios.query.filter_by(nombre_usuario=nombre_usuario).first()
 
     if usuario is None:

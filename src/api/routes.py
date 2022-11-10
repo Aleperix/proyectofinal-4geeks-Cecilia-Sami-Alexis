@@ -89,16 +89,23 @@ def profile(id_usuario):
            ##### Fin JWT #####
 
            ##### Inicio Usuarios #####
-#Creamos un nuevo viaje
+#Creamos un nuevo usuario
 @api.route('/register', methods=['POST'])
 def add_new_user():
     body = json.loads(request.data)
+
+    user_exist = Usuarios.query.filter_by(nombre_usuario=body["nombre_usuario"]).first()
+    email_exist = Usuarios.query.filter_by(correo=body["correo"]).first()
 
     for i in body:
         if body[i] == None:
             raise APIException('Hay campos vacíos', status_code=204)
     
-    
+    if user_exist != None:
+        raise APIException('El nombre de usuario ya está en uso', status_code=403)
+    if email_exist != None:
+        raise APIException('El correo ya está en uso', status_code=403)
+
     new_user = Usuarios(
         nombre_usuario=body["nombre_usuario"],
         nombre=body["nombre"],

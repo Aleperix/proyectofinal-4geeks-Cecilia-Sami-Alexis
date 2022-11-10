@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { Context } from "../store/appContext";
 export const ConfPerfil = () => {
 	const { store, actions } = useContext(Context);
+	const departamentos = require('../data/departamentos.json');
 
 	return (
 		<div className="container d-flex justify-content-center align-items-center">
@@ -42,25 +43,15 @@ export const ConfPerfil = () => {
 				<label htmlFor="dp-ciudad" className="form-label">
 					Ciudad
 				</label>
-				<select className="form-select" defaultValue="0" id="dp-ciudad">
-					<option value="0" disabled>Ciudad</option>
-					<option value="1">Artigas</option>
-					<option value="2">Canelos</option>
-					<option value="4">Cerro Largo</option>
-					<option value="5">Colonia</option>
-					<option value="6">Flores</option>
-					<option value="7">Florida</option>
-					<option value="8">Lavalleja</option>
-					<option value="9">Maldonado</option>
-					<option value="10">Paysandú</option>
-					<option value="11">Río Negro</option>
-					<option value="12">Rivera</option>
-					<option value="13">Rocha</option>
-					<option value="14">Salto</option>
-					<option value="15">San José</option>
-					<option value="16">Soriano</option>
-					<option value="17">Tacuarembó</option>
-					<option value="18">Treinta y Tres</option>
+				<select className="form-select" defaultValue="" id="dp-ciudad">
+					<option value="" disabled>-- Selecciona una opción --</option>
+					{departamentos.map((element, index) => {
+								return (
+									<option value={element.departamento} key={index}>
+										{element.departamento}
+									</option>
+								);
+							})}
 				</select>
 
 				<button type="button" className="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop">

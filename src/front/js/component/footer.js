@@ -17,7 +17,7 @@ export const Footer = () => {
 					</div>
 					<div className="col mt-2" >
 						<p className="h5 mb-1" >Acerca de</p> 
-						<Link className="text-secondary text-decoration-none d-block" to="../pages/nosotros">Sobre Nosotros</Link>
+						<Link className="text-secondary text-decoration-none d-block" to="/nosotros">Sobre Nosotros</Link>
 						<a className="text-secondary text-decoration-none d-block" href="">Prensa y Medios</a>
 						<a className="text-secondary text-decoration-none d-block" href="">Ayuda</a>
 					</div>

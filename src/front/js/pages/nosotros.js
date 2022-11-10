@@ -40,7 +40,12 @@ export const Nosotros = () => {
               <h5 className="card-title text-center">
                 Alexis Peña: director ejecutivo
               </h5>
-              <p className="card-text">Redes sociales:</p>
+              <p className="card-text text-center">Redes sociales:</p>
+              <div className="d-flex justify-content-center">
+              <a href="https://linkedin.com/in/Aleperix" target="_blank" title="Linkedin de Alexis" className="mx-1"><i class="fab fa-linkedin"></i></a>
+              <br />
+              <a href="https://github.com/Aleperix" target="_blank" title="Github de Alexis" className="mx-1"> <i class="fab fa-github"></i></a>
+              </div>
             </div>
           </div>
           <div className="card m-2" style={{ width: "18rem" }}>
@@ -55,7 +60,11 @@ export const Nosotros = () => {
               <h5 className="card-title text-center">
                 Cecilia O'Neil: fundador y presidenta
               </h5>
-              <p className="card-text"></p>
+              <p className="card-text text-center">Redes sociales:</p>
+              
+              <div className="d-flex justify-content-center" >
+              <a href="https://github.com/ceciliaoneil" target="_blank" title="Github de Cecilia"> <i class="fab fa-github"></i></a>
+              </div>
             </div>
           </div>
           <div className="card m-2" style={{ width: "18rem" }}>
@@ -64,7 +73,12 @@ export const Nosotros = () => {
               <h5 className="card-title text-center">
                 Sandra Martinez: asesora tecnica
               </h5>
-              <p className="card-text"></p>
+              <p className="card-text text-center">Redes sociales:</p>
+              <div className="d-flex justify-content-center">
+              <a href="https://www.linkedin.com/in/sandra-martinez-arrieta-685508247" target="_blank" title="Linkedin de Alexis" className="mx-1"><i class="fab fa-linkedin"></i></a>
+              <br />
+              <a href="https://github.com/sandramartinezarrieta" target="_blank" title="Github de Alexis" className="mx-1"> <i class="fab fa-github"></i></a>
+              </div>
             </div>
           </div>
         </div>

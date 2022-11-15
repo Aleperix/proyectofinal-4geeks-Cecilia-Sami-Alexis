@@ -1,23 +1,25 @@
 """
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
-from flask import Flask, request, jsonify, url_for, Blueprint
+import os
+import datetime
+from flask import Flask, request, jsonify, url_for, Blueprint, current_app, render_template, flash
 from api.models import db, Usuarios, Vehiculos, Viajes, Acompanantes
 from api.utils import generate_sitemap, APIException
 import json
 from flask_jwt_extended import create_access_token, create_refresh_token, get_jwt_identity, jwt_required
+from flask_mail import Message
+from api.token import generate_confirmation_token, confirm_token
+from api.emails import send_register_email
 
 api = Blueprint('api', __name__)
 
-
            ##### Inicio JWT #####
-
 #Logueamos al usuario si los datos proporcionados son correctos
 @api.route("/login", methods=["POST"])
 def login():
     nombre_usuario = request.json.get("nombre_usuario", None)
     clave = request.json.get("clave", None)
-    print(nombre_usuario)
     usuario = Usuarios.query.filter_by(nombre_usuario=nombre_usuario).first()
 
     if usuario is None:
@@ -114,20 +116,43 @@ def add_new_user():
         correo=body["correo"],
         departamento=body["departamento"],
         ciudad=body["ciudad"],
-        fecha_nacimiento=body["fecha_nacimiento"],
+        fecha_nacimiento=body["fecha_nacimiento"].replace("-", ""),
         genero=body["genero"],
         sobre_mi=None,
         preferencias=None,
         url_avatar=None,
+        confirmado=False,
         activo=1)
 
     db.session.add(new_user)
     db.session.commit()
+    token = generate_confirmation_token(new_user.correo)
+    confirm_url = os.environ["FRONTEND_URL"]+"/register/confirm/"
+    html = render_template('email/activate.html', token=token, confirm_url=confirm_url)
+    subject = "Por favor, confirma tu cuenta"
+    send_register_email(new_user.correo, subject, html)
     response_body = {
-        "message": "Usuario creado con éxito",
+        "message": "Usuario creado con éxito. Se ha enviado un correo de confirmación a tu correo electrónico",
         "status": 200
     }
     return jsonify(response_body), 200
+
+# Confirmamos la cuenta del nuevo usuario
+@api.route('/register/confirm/<token>')
+def confirm_email(token):
+    try:
+        email = confirm_token(token)
+    except:
+        raise APIException('El link de confirmación es inválido o ha expirado', status_code=404)
+    user = Usuarios.query.filter_by(correo=email).first_or_404()
+    if user.confirmado:
+        raise APIException('La cuenta ya ha sido confirmada. Por favor, inicia sesión', status_code=404)
+    else:
+        user.confirmado = True
+        user.confirmado_en = datetime.datetime.now()
+        db.session.add(user)
+        db.session.commit()
+        raise APIException('Cuenta confirmada con éxito', status_code=200)
            ##### Fin Usuarios #####
 
             ##### Inicio Viajes #####

@@ -16,6 +16,8 @@ class Usuarios(db.Model):
     sobre_mi = db.Column(db.String(250), unique=False, nullable=True)
     preferencias = db.Column(db.String(250), unique=False, nullable=True)
     url_avatar = db.Column(db.String(500), unique=False, nullable=True)
+    confirmado = db.Column(db.Boolean(), unique=False, nullable=False)
+    confirmado_en = db.Column(db.DateTime, nullable=True)
     activo = db.Column(db.Boolean(), unique=False, nullable=False)
     viajes = db.relationship('Viajes', backref='usuarios', lazy=True)
     vehiculos = db.relationship('Vehiculos', backref='usuarios', lazy=True)

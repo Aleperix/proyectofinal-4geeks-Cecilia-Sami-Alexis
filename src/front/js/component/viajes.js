@@ -13,7 +13,7 @@ export const Viajes = () => {
 					{store.viajes.map((element, i) => {
 						return (
 							<li className="list-group-item  align-items-center" key={i} role="button">
-								<Link to={"/viaje/" + (i + 1)} className="text-decoration-none text-dark">
+								<Link to={"/viaje/" + (i+1)} className="text-decoration-none text-dark">
 									<div className="d-flex flex-row flex-wrap flex-sm-wrap flex-md-wrap justify-content-between">
 										<div className="d-flex align-items-center justify-content-start col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 text-break">
 											{element.desde} <i className="fas fa-chevron-right"></i> {element.hasta}

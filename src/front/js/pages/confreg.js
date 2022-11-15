@@ -3,7 +3,7 @@ import { Context } from "../store/appContext";
 import {Link, useLocation, useNavigate} from "react-router-dom";
 
 export const ConfReg = () => {
-	const { store, actions } = useContext(Context);
+	const { actions } = useContext(Context);
     const codigo = useRef()
     const [confRegMsg, setConfRegMsg] = useState("");
     const mostrarAlert = useRef("")
@@ -18,8 +18,8 @@ export const ConfReg = () => {
             mostrarAlert.current.classList.remove('d-none');
             mostrarAlert.current.classList.add('alert-success');
             setConfRegMsg(response.message);
-        }else if(response.status == 404){
-            setTimeout(() => {mostrarAlert.current.classList.add('d-none'), mostrarAlert.current.classList.remove('alert-danger')}, 5000);
+        }else if(response.status == 404 || response.status == 403){
+            setTimeout(() => {mostrarAlert.current.classList.add('d-none'), mostrarAlert.current.classList.remove('alert-danger'), response.status == 403 && navigate("/login")}, 5000);
             mostrarAlert.current.classList.remove('d-none');
             mostrarAlert.current.classList.add('alert-danger')
             setConfRegMsg(response.message);

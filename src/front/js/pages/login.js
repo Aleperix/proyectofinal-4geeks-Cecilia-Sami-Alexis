@@ -27,7 +27,7 @@ export const Login = () => {
     }else{
         setTimeout(() => {mostrarAlert.current.classList.add('d-none')}, 3000);
         mostrarAlert.current.classList.remove('d-none');
-        setLoginError(onLogged.message);
+        setLoginError(onLogged?.message);
     }
   }
 

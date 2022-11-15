@@ -21,20 +21,20 @@ export const Perfil = () => {
 		const response = await actions.getProfile(id)
 		if (response.status == 200){
 			const edad = getAge(String(response.perfil.fecha_nacimiento))
-			setDatosPerfil(response.perfil, {status: response.status})
+			setDatosPerfil({perfil: response.perfil, status: response.status})
 			setViajesConductor(response.viajes.conductor)
 			setViajesAcompanante(response.viajes.acompanante)
 			setEdad(edad)
 			return null
 		}
-		console.log(response.data, {status: response.status});
-		setDatosPerfil(response.data, {status: response.status})
+		console.log({info: response.data}, {status: response.status});
+		setDatosPerfil({message: response.data.message, status: response.status})
 		return null
 	}
 	
 	function getAge(fechaNac) {
 		let hoy = new Date();
-		let miFecha = fechaNac.substring(0, 2)+"-"+fechaNac.substring(2, 4)+"-"+fechaNac.substring(4, 8)
+		let miFecha = fechaNac.substring(0, 4)+"-"+fechaNac.substring(4, 6)+"-"+fechaNac.substring(6, 8)
 		let fechaNacUsr = new Date(miFecha);
 		let edad = hoy.getFullYear() - fechaNacUsr.getFullYear();
 		let m = hoy.getMonth() - fechaNacUsr.getMonth();
@@ -74,20 +74,20 @@ export const Perfil = () => {
 	return (
 		<>
 		{store.auth ?
-		datosPerfil.status !== 404 ?
+		datosPerfil.status != 404 ?
 			<div className="container">
 				<div className="mt-5 mx-5" id="profile">
 					<div className="container bg-light bg-opacity-25 rounded border border-secondary d-flex justify-content-between align-items-center">
-						<h1 className="h2 my-2">Perfil de {datosPerfil.nombre_usuario}</h1>
-						{store.usuario.id == datosPerfil.id ?
+						<h1 className="h2 my-2">Perfil de {datosPerfil.perfil?.nombre_usuario}</h1>
+						{store.usuario.id == datosPerfil.perfil?.id ?
 							<>
-							<img className="my-2 border border-2 rounded-circle" data-bs-toggle="modal" data-bs-target="#changeProfileImage" onClick={() => tabClick(remoteAvatarTab.current)} src={datosPerfil.url_avatar == null ? defaultAvatarUrl : store.usuario.url_avatar} width="10%" role="button" alt="Imagen de Perfil" />
+							<img className="my-2 border border-2 rounded-circle" data-bs-toggle="modal" data-bs-target="#changeProfileImage" onClick={() => tabClick(remoteAvatarTab.current)} src={datosPerfil.perfil?.url_avatar == null ? defaultAvatarUrl : store.usuario.url_avatar} width="10%" role="button" alt="Imagen de Perfil" />
 							</>
 						: 
-							<img className="my-2 border border-2 rounded-circle" src={datosPerfil.url_avatar == null ? defaultAvatarUrl : datosPerfil.url_avatar} width="10%" alt="Imagen de Perfil" />
+							<img className="my-2 border border-2 rounded-circle" src={datosPerfil.perfil?.url_avatar == null ? defaultAvatarUrl : datosPerfil.perfil?.url_avatar} width="10%" alt="Imagen de Perfil" />
 						}
 					</div>
-					{store.usuario.id == datosPerfil.id ?
+					{store.usuario.id == datosPerfil.perfil?.id ?
 					<div className="mx-4 py-2 bg-secondary bg-opacity-25 border-start border-end border-secondary h-100" id="my-profile-config">
 						<div className="my-4 d-flex justify-content-center">
 							<Link className="d-block text-decoration-none m-2" to={"/confperfil/"+store.usuario.id}>Editar datos personales</Link>
@@ -109,23 +109,23 @@ export const Perfil = () => {
 						<div className="my-4">
 							<div className="row d-flex flex-xs-wrap flex-sm-wrap flex-md-wrap justify-content-center">
 								<div className="col-xs-6 col-sm-6 col-md-6 col-lg-4 col-xl-4">
-									<span className="d-block m-2 text-break"><b>Usuario: </b>{datosPerfil.nombre_usuario}</span>
-									<span className="d-block m-2 text-break"><b>Nombre: </b>{datosPerfil.nombre}</span>
-									<span className="d-block m-2 text-break"><b>Apellido: </b>{datosPerfil.apellido}</span>
-									<span className="d-block m-2 text-break"><b>Correo Electrónico: </b>{datosPerfil.correo}</span>
-									<span className="d-block m-2 text-break"><b>Ciudad: </b>{datosPerfil.ciudad}</span>
+									<span className="d-block m-2 text-break"><b>Usuario: </b>{datosPerfil.perfil?.nombre_usuario}</span>
+									<span className="d-block m-2 text-break"><b>Nombre: </b>{datosPerfil.perfil?.nombre}</span>
+									<span className="d-block m-2 text-break"><b>Apellido: </b>{datosPerfil.perfil?.apellido}</span>
+									<span className="d-block m-2 text-break"><b>Correo Electrónico: </b>{datosPerfil.perfil?.correo}</span>
+									<span className="d-block m-2 text-break"><b>Ciudad: </b>{datosPerfil.perfil?.ciudad}</span>
 								</div>
 								<div className="col-xs-6 col-sm-6 col-md-6 col-lg-4 col-xl-4">
 									<span className="d-block m-2 text-break"><b>Edad: </b>{edad}</span>
-									<span className="d-block m-2 text-break"><b>Género: </b>{datosPerfil.genero}</span>
-									<span className="d-block m-2 text-break"><b>Preferencias para viajar: </b>{datosPerfil.preferencias}</span>
-									<span className="d-block m-2 text-break"><b>Sobre mi: </b>{datosPerfil.acerca}</span>
+									<span className="d-block m-2 text-break"><b>Género: </b>{datosPerfil.perfil?.genero}</span>
+									<span className="d-block m-2 text-break"><b>Preferencias para viajar: </b>{datosPerfil.perfil?.preferencias}</span>
+									<span className="d-block m-2 text-break"><b>Sobre mi: </b>{datosPerfil.perfil?.sobre_mi}</span>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-				{store.usuario.id == datosPerfil.id ?
+				{store.usuario.id == datosPerfil.perfil?.id ?
 				<div className="mx-5" id="travels">
 					<div className="container bg-light bg-opacity-25 rounded border border-secondary d-flex justify-content-between align-items-center">
 						<h4 className="h4 my-2">Mis Viajes</h4>
@@ -212,13 +212,13 @@ export const Perfil = () => {
 				false}
 				<div className="mx-5" id="vehicles">
 					<div className="container bg-light bg-opacity-25 rounded border border-secondary d-flex justify-content-between align-items-center">
-						<h4 className="h4 my-2">{store.usuario.id == datosPerfil.id ? "Mis Vehículos" : "Vehículos"}</h4>
+						<h4 className="h4 my-2">{store.usuario.id == datosPerfil.perfil?.id ? "Mis Vehículos" : "Vehículos"}</h4>
 						<i className="h4 fas fa-space-shuttle"></i>
 					</div>
 					<div className="mb-2 mx-4 py-2 bg-secondary bg-opacity-25 rounded-bottom border-start border-end border-bottom border-secondary h-100" id="my-profile-config">
 						{datosPerfil?.vehiculos?.length === 0 ?
 						<div className="my-4 d-flex justify-content-center">
-							<p className="d-block m-2 d-flex justify-content center">{store.usuario.id == datosPerfil.id ? "Aún no tienes vehículos" : "El usuario aún no tiene vehículos"}</p>
+							<p className="d-block m-2 d-flex justify-content center">{store.usuario.id == datosPerfil.perfil?.id ? "Aún no tienes vehículos" : "El usuario aún no tiene vehículos"}</p>
 						</div>
 							:
 							<div className="my-4">
@@ -233,7 +233,7 @@ export const Perfil = () => {
 											</tr>
 										</thead>
 										<tbody>
-										{datosPerfil.vehiculos?.map((element, index) => {
+										{datosPerfil.perfil?.vehiculos?.map((element, index) => {
 											return(
 											<tr key={index+1}>
 											<th scope="row">{index+1}</th>
@@ -291,7 +291,7 @@ export const Perfil = () => {
 					</div>
 			</div>
 			:
-			<ErrorPage errorStatus={store.error} errorMessage={datosPerfil.message}/>
+			<ErrorPage errorStatus={datosPerfil.status} errorMessage={datosPerfil.message}/>
 			:
 			<ErrorPage errorStatus={'401'} errorMessage={'No tienes permitido estar aquí'}/>}
 		</>

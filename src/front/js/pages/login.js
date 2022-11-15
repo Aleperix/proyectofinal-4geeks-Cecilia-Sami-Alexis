@@ -4,7 +4,9 @@ import { Context } from "../store/appContext";
 
 export const Login = () => {
 	const {store, actions} = useContext(Context)
-  const [depIndex] = useState(Math.floor(Math.random() * store.departamentos.length))
+  const departamentos = require('../data/departamentos.json');
+  const [depIndex] = useState(Math.floor(Math.random() * departamentos.length))
+  
   const [usuario, setUsuario] = useState("");
   const [clave, setClave] = useState("");
 	const [loginError, setLoginError] = useState("");
@@ -30,7 +32,7 @@ export const Login = () => {
   }
 
 	return (
-		<div className="contenedor d-flex align-items-center vh-100 vh-100" style={{backgroundImage: 'url("'+store.departamentos[depIndex].img+'")', backgroundSize: 'cover'}}>
+		<div className="contenedor d-flex align-items-center vh-100" style={{backgroundImage: 'url("'+departamentos[depIndex].img+'")', backgroundSize: 'cover'}}>
       <div className="container text-center" style={{width: "25rem"}}>
         {!store.auth ?
         <form className="bg-white p-3">

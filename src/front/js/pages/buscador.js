@@ -6,8 +6,9 @@ export const Buscador = () => {
 
 	return (
 		<div className="container">
-            <h4>¿A dónde <span className="text-primary">quieres ir</span>?</h4>
+            
 			<nav className="navbar bg-light my-5">
+            <h3 className="d-flex justify-content-center w-100">¿A dónde <span className="text-primary"> quieres ir</span>?</h3>
 				<div className="container-fluid">
 					<form className="d-flex justify-content-center w-100" role="search">
 						<input className="form-control me-2" type="search" placeholder="Origen" aria-label="Search" />

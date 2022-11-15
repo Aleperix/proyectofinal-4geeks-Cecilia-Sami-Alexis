@@ -14,12 +14,14 @@ import { CodigoClave } from "./pages/codigoclave";
 import { CambioClave } from "./pages/cambioclave";
 import { Nosotros } from "./pages/nosotros";
 import { Preguntas } from "./pages/preguntas";
+import { Buscador } from "./pages/buscador";
 import injectContext from "./store/appContext";
 
 
 
 import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
+
 
 
 
@@ -48,6 +50,7 @@ const Layout = () => {
                         <Route element={<Nosotros />} path="/nosotros"/>
                         <Route element={<Viaje />} path="/viaje/:id" />
                         <Route element={<Preguntas />} path="/preguntas"/>
+						<Route element={<Buscador />} path="/search"/>
                         <Route element={<h1>No encontrado!</h1>} />
                         
                     </Routes>

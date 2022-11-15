@@ -127,6 +127,18 @@ const getState = ({ getStore, getActions, setStore }) => {
 					return {message: response.data.message, status: response.status}
 				}
 			},
+			forgotPass: async (value) => {
+				const action = getActions();
+				let response = await action.putData(process.env.BACKEND_URL + "/api/forgotpass", value);
+				console.log(response);
+				if (!response.hasOwnProperty("code")) {
+					return {message: response.data.message, status: response.status}
+				} else {
+					console.log(response);
+					response = response.response;
+					return {message: response.data.message, status: response.status}
+				}
+			},
 			//Fin Usuarios
 
 			//Inicio Viajes

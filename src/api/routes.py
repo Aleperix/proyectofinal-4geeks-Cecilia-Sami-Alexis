@@ -235,4 +235,48 @@ def add_new_travel():
         "status": 200
     }
     return jsonify(response_body), 200
+  
+#Obtenemos un viaje dependiendo de su id
+@api.route('/viaje/<int:travel_id>', methods=['GET'])
+def get_one_travel(travel_id):
+    travel = Viajes.query.filter_by(id=travel_id).first()
+
+    if travel is None:
+        raise APIException('El viaje que buscas no existe', status_code=404)
+
+    return jsonify(travel.serialize()), 200
+
+# # Modificamos la cantidad de asientos disponibles en el viaje
+@api.route("/viaje/<int:travel_id>", methods=["PUT"])
+@jwt_required()
+def place(travel_id):
+    travel = Viajes.query.filter_by(id=travel_id).first()
+    body = json.loads(request.data)
+
+    if travel is None:
+        raise APIException('El viaje que buscas no existe', status_code=404)
+
+    travel.asientos_disponibles=body["asientos_disponibles"]
+
+    # travel = Acompanantes.query
+#     place_to_modify = request.json.get("place", None)
+#     user_id = request.json.get("idCompany", None)
+#     usuario = Usuarios.query.filter_by(id=user_id).first()
+
+#     print(placeto_modify)
+#     print(user_id)
+    db.session.add(body)
+    db.session.commit()
+
+
+    # # if place_to_modify :
+    # #     raise APIException('Usuario o contraseña incorrectos', status_code=401)
+
+
+    # access_token = create_access_token(identity=nombre_usuario)
+    # refresh_token = create_refresh_token(identity=nombre_usuario)
+    response_body = {
+        "Añadido al viaje correctamente"
+    }
+    return jsonify(response_body), 200
            ##### Fin Viajes #####

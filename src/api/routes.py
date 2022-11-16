@@ -1,29 +1,42 @@
 """
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
-from flask import Flask, request, jsonify, url_for, Blueprint
+import os
+import datetime
+from flask import Flask, request, jsonify, url_for, Blueprint, current_app, render_template, flash
 from api.models import db, Usuarios, Vehiculos, Viajes, Acompanantes
 from api.utils import generate_sitemap, APIException
 import json
 from flask_jwt_extended import create_access_token, create_refresh_token, get_jwt_identity, jwt_required
+from flask_mail import Message
+from api.token import generate_confirmation_token, confirm_token
+import random, string
 
 api = Blueprint('api', __name__)
 
+def send_email(to, subject, template):
+    msg = Message(
+        subject,
+        recipients=[to],
+        html=template,
+        sender=current_app.config['MAIL_DEFAULT_SENDER']
+    )
+    current_app.mail.send(msg)
 
            ##### Inicio JWT #####
-
 #Logueamos al usuario si los datos proporcionados son correctos
 @api.route("/login", methods=["POST"])
 def login():
     nombre_usuario = request.json.get("nombre_usuario", None)
     clave = request.json.get("clave", None)
-
     usuario = Usuarios.query.filter_by(nombre_usuario=nombre_usuario).first()
+
+    decrypted_pass = current_app.bcrypt.check_password_hash(usuario.clave, clave)
 
     if usuario is None:
         raise APIException('El usuario ingresado no existe', status_code=404)
 
-    if nombre_usuario != usuario.nombre_usuario or clave != usuario.clave:
+    if nombre_usuario != usuario.nombre_usuario or decrypted_pass == False:
         raise APIException('Usuario o contraseña incorrectos', status_code=401)
     
 
@@ -88,6 +101,97 @@ def profile(id_usuario):
     return jsonify(response_body), 200
            ##### Fin JWT #####
 
+           ##### Inicio Usuarios #####
+#Creamos un nuevo usuario
+@api.route('/register', methods=['POST'])
+def add_new_user():
+    body = json.loads(request.data)
+
+    user_exist = Usuarios.query.filter_by(nombre_usuario=body["nombre_usuario"]).first()
+    email_exist = Usuarios.query.filter_by(correo=body["correo"]).first()
+
+    for i in body:
+        if body[i] == None:
+            raise APIException('Hay campos vacíos', status_code=204)
+    
+    if user_exist != None:
+        raise APIException('El nombre de usuario ya está en uso', status_code=403)
+    if email_exist != None:
+        raise APIException('El correo ya está en uso', status_code=403)
+
+    pw_hash = current_app.bcrypt.generate_password_hash(body["clave"]).decode('utf-8')
+
+    new_user = Usuarios(
+        nombre_usuario=body["nombre_usuario"],
+        nombre=body["nombre"],
+        apellido=body["apellido"],
+        clave=pw_hash,
+        correo=body["correo"],
+        departamento=body["departamento"],
+        ciudad=body["ciudad"],
+        fecha_nacimiento=body["fecha_nacimiento"].replace("-", ""),
+        genero=body["genero"],
+        sobre_mi=None,
+        preferencias=None,
+        url_avatar=None,
+        confirmado=False,
+        activo=1)
+
+    db.session.add(new_user)
+    db.session.commit()
+    token = generate_confirmation_token(new_user.correo)
+    confirm_url = os.environ["FRONTEND_URL"]+"/register/confirm/"
+    html = render_template('email/activate.html', token=token, confirm_url=confirm_url, name=new_user.nombre)
+    subject = "Por favor, confirma tu cuenta"
+    send_email(new_user.correo, subject, html)
+    response_body = {
+        "message": "Usuario creado con éxito. Se ha enviado un correo de confirmación a tu correo electrónico",
+        "status": 200
+    }
+    return jsonify(response_body), 200
+
+# Confirmamos la cuenta del nuevo usuario
+@api.route('/register/confirm/<token>')
+def confirm_email(token):
+    try:
+        email = confirm_token(token)
+    except:
+        raise APIException('El link de confirmación es inválido o ha expirado', status_code=404)
+    user = Usuarios.query.filter_by(correo=email).first_or_404()
+    if user.confirmado:
+        raise APIException('La cuenta ya ha sido confirmada. Por favor, inicia sesión', status_code=403)
+    else:
+        user.confirmado = True
+        user.confirmado_en = datetime.datetime.now()
+        db.session.add(user)
+        db.session.commit()
+        raise APIException('Cuenta confirmada con éxito', status_code=200)
+
+# Cambiamos la contraseña del usuario para que pueda volver a entrar al sitio
+@api.route('/forgotpass', methods=['PUT'])
+def forgot_pass():
+    recover_email = request.json['email']
+    print(recover_email == "")
+    recover_password = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(8))
+
+    if recover_email == "":
+        raise APIException('Debes ingresar tu correo electrónico', status_code=204)
+    user = Usuarios.query.filter_by(correo=recover_email).first()
+    if user == None:
+        raise APIException('El correo ingresado no existe en nuestros registros', status_code=404)
+    pw_hash = current_app.bcrypt.generate_password_hash(recover_password).decode('utf-8')
+    user.clave = pw_hash
+    db.session.commit()
+    html = render_template('email/forgot.html', new_pass=recover_password, name=user.nombre)
+    subject = "Tu nueva contraseña de Fromtony!"
+    send_email(recover_email, subject, html)
+    response_body = {
+        "message": "Una nueva contraseña ha sido enviada a tu correo electrónico",
+        "status": 200
+    }
+    return jsonify(response_body), 200
+           ##### Fin Usuarios #####
+
             ##### Inicio Viajes #####
 #Obtenemos todos los viajes
 @api.route('/viajes', methods=['GET'])
@@ -131,7 +235,7 @@ def add_new_travel():
         "status": 200
     }
     return jsonify(response_body), 200
-
+  
 #Obtenemos un viaje dependiendo de su id
 @api.route('/viaje/<int:travel_id>', methods=['GET'])
 def get_one_travel(travel_id):

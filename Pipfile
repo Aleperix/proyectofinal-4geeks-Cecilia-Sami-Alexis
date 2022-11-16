@@ -18,6 +18,10 @@ gunicorn = "*"
 cloudinary = "*"
 flask-admin = "*"
 flask-jwt-extended = "*"
+flask-redmail = "*"
+flask-mail = "*"
+itsdangerous = "*"
+flask-bcrypt = "*"
 
 [requires]
 python_version = "3.8"

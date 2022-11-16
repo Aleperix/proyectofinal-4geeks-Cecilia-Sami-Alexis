@@ -12,6 +12,8 @@ from api.models import db
 from api.routes import api
 from api.admin import setup_admin
 from flask_jwt_extended import JWTManager
+from flask_mail import Mail
+from flask_bcrypt import Bcrypt
 # from api.commands import setup_commands
 
 #from models import Person
@@ -35,11 +37,36 @@ db.init_app(app)
 # Allow CORS requests to this API
 CORS(app)
 
+# Main settings
+app.config["SECRET_KEY"] = "Fromtony-sk"
+app.config["SECURITY_PASSWORD_SALT"] = 'Fromtony-sps'
+
+# Email Configuration
+mail_settings = {
+    "MAIL_SERVER": 'smtp.mailtrap.io',
+    "MAIL_PORT":  2525,
+    "MAIL_USE_TLS": True,
+    "MAIL_USE_SSL": False,
+    "MAIL_USERNAME":  'd34c6de1506ac4', #ACA COLOQUEN EL CORREO DE LA APP DEL ALUMN
+    "MAIL_PASSWORD": 'b27a068a129e6a', #PASSWORD DEL CORREO DE LA APP DEL ALUMNO
+    "MAIL_DEFAULT_SENDER": 'd34c6de1506ac4'
+}
+app.config.update(mail_settings)
+mail = Mail(app)
+#agregan mail a la app y se va llamar en routes.py como current_app
+app.mail= mail
+#FIN CONFIGURACION EMAIL
+
+#Configuración bcrypt
+bcrypt = Bcrypt(app)
+app.bcrypt = bcrypt
+#Fin configuración bcrypt
+
 # Setup the Flask-JWT-Extended extension
 app.config["JWT_SECRET_KEY"] = os.getenv('JWT_SECRET')  # Change this!
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=24)
 app.config["JWT_REFRESH_TOKEN_EXPIRES"] = timedelta(days=365)
-jwt = JWTManager(app)
+jwt_extended = JWTManager(app)
 
 # add the admin
 setup_admin(app)

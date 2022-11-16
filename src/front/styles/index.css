@@ -4,9 +4,19 @@
 .colform {
     width: "75%";
 }
+
+/* File Upload Button */
 ::-webkit-file-upload-button {
     display: none;
 }
 ::file-selector-button {
     display: none;
+}
+
+/* Add Placeholder to floating inputs  */
+.form-floating > .form-control::placeholder {
+    color: revert;
+}
+.form-floating > .form-control:not(:focus)::placeholder {
+    color: transparent;
 }

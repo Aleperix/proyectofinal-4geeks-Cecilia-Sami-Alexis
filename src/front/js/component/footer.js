@@ -1,6 +1,7 @@
 import React from "react";
 import {Link, useLocation} from "react-router-dom";
 
+
 export const Footer = () => {
 	return (
 		useLocation().pathname != "/login" ? useLocation().pathname != "/register" ?
@@ -14,9 +15,9 @@ export const Footer = () => {
 						<a className="text-secondary text-decoration-none d-block" href="">hola@viajes.com</a>
 						<a className="text-secondary text-decoration-none d-block" href="">+598 908 96 18</a>
 					</div>
-					<div className="col mt-2">
-						<p className="h5 mb-1" >Acerca de</p>
-						<a className="text-secondary text-decoration-none d-block" href="">Sobre Nosotros</a>
+					<div className="col mt-2" >
+						<p className="h5 mb-1" >Acerca de</p> 
+						<Link className="text-secondary text-decoration-none d-block" to="/nosotros">Sobre Nosotros</Link>
 						<a className="text-secondary text-decoration-none d-block" href="">Prensa y Medios</a>
 						<a className="text-secondary text-decoration-none d-block" href="">Ayuda</a>
 					</div>

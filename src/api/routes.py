@@ -8,7 +8,7 @@ from api.models import db, Usuarios, Vehiculos, Viajes, Acompanantes
 from api.utils import generate_sitemap, APIException
 import json
 from flask_jwt_extended import create_access_token, create_refresh_token, get_jwt_identity, jwt_required
-from flask_mail import Message
+from flask_mail import Mail, Message
 from api.token import generate_confirmation_token, confirm_token
 import random, string
 

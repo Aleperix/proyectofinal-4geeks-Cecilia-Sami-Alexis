@@ -166,7 +166,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			getOneTravel: async (id) => {
 				const action = getActions();
-				const response = await action.getData(process.env.API_URL + "/api/viaje/"+ id);
+				const response = await action.getData(process.env.BACKEND_URL + "/api/viaje/"+ id);
 				if (!response.hasOwnProperty("code")) {
 					return response.data;
 				}
@@ -174,7 +174,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			modifyTravel: async (id,data) => {
 				const action = getActions();
-				const response = await action.putData(process.env.API_URL + "/api/viaje/"+ id, data, { Authorization: "Bearer " + localStorage.getItem("token") });
+				const response = await action.putData(process.env.BACKEND_URL + "/api/viaje/"+ id, data, { Authorization: "Bearer " + localStorage.getItem("token") });
 				if (!response.hasOwnProperty("code")) {
 					return response.data;
 				}

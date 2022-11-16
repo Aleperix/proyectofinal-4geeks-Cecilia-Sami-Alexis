@@ -1,12 +1,14 @@
-import React, {useContext} from "react";
+import React, {useContext, useRef} from "react";
 import {Context} from "../store/appContext";
 import defaultAvatarUrl from "../../img/defaultAvatar.png"
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import { NuevoViaje } from "./nuevoviaje";
+import { SearchC } from "./search_c";
 
 export const Navbar = () => {
 	const navigate = useNavigate()
 	const {store, actions}= useContext(Context)
+	const searchDropdown = useRef()
 
 	const handleLogout = ()=>{
 		let onLogged = actions.logout();
@@ -14,6 +16,15 @@ export const Navbar = () => {
 			navigate('/')
 		}
 	}
+
+	const toggleDropdown = ()=> {
+		if (!searchDropdown.current.classList.contains("show")) {
+			searchDropdown.current.classList.add('show');
+		} else {
+			searchDropdown.current.classList.remove('show');
+		}
+	  }
+
 	return (
 		useLocation().pathname != "/login" ? useLocation().pathname != "/register" ?
 		<>
@@ -23,6 +34,7 @@ export const Navbar = () => {
 				<button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
 					<span className="navbar-toggler-icon"></span>
 				</button>
+				<SearchC/>
 				<div className="collapse navbar-collapse" id="navbarNavDropdown">
 				{!store.auth ?
 					<ul className="navbar-nav ms-auto">

@@ -235,4 +235,18 @@ def add_new_travel():
         "status": 200
     }
     return jsonify(response_body), 200
+
+#Obtenemos todos los viajes
+@api.route('/viajes/search', methods=['POST'])
+def search_travels():
+    body = json.loads(request.data)
+
+    viajes = Viajes.query.filter(Viajes.desde.like(body["ciudad"]) | Viajes.hasta.like(body["ciudad"])).all() # esto obtiene todos los registros de la tabla User
+
+    if len(viajes) == 0:
+        raise APIException('Aún no hay viajes disponibles para esa ciudad', status_code=404)
+
+    results = list(map(lambda item: item.serialize(), viajes)) #esto serializa los datos del arrays users
+
+    return jsonify(results), 200
            ##### Fin Viajes #####

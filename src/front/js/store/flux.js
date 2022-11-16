@@ -164,6 +164,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 					return {message: response.data.message}
 				}
 			},
+			searchTravels: async (value) => {
+				const action = getActions();
+				let response = await action.postData(process.env.BACKEND_URL + "/api/viajes/search", value);
+				return response
+			},
 			//Fin Viajes
 
 			//Inicio Acompanantes

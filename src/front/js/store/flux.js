@@ -169,6 +169,22 @@ const getState = ({ getStore, getActions, setStore }) => {
 				let response = await action.postData(process.env.BACKEND_URL + "/api/viajes/search", value);
 				return response
 			},
+			getOneTravel: async (id) => {
+				const action = getActions();
+				const response = await action.getData(process.env.BACKEND_URL + "/api/viaje/"+ id);
+				if (!response.hasOwnProperty("code")) {
+					return response.data;
+				}
+				return response.response;
+			},
+			modifyTravel: async (id,data) => {
+				const action = getActions();
+				const response = await action.putData(process.env.BACKEND_URL + "/api/viaje/"+ id, data, { Authorization: "Bearer " + localStorage.getItem("token") });
+				if (!response.hasOwnProperty("code")) {
+					return response.data;
+				}
+				return response.response;
+			},
 			//Fin Viajes
 
 			//Inicio Acompanantes

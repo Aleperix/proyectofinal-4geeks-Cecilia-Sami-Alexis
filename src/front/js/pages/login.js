@@ -1,6 +1,7 @@
 import React, {useContext, useState, useRef} from "react";
 import { useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
+import logo from "../../img/logo3.png"
 
 export const Login = () => {
 	const {store, actions} = useContext(Context)
@@ -36,7 +37,7 @@ export const Login = () => {
       <div className="container text-center" style={{width: "25rem"}}>
         {!store.auth ?
         <form className="bg-white p-3">
-          <img className="mb-4" src="https://getbootstrap.com/docs/5.1/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57"/>
+          <img className="mb-4" src={logo} alt="" />
           <h1 className="h3 mb-3 fw-normal">Iniciar sesión</h1>
           <div className="alert alert-danger d-none" ref={mostrarAlert} role="alert">{loginError}</div>
           <div className="form-floating">

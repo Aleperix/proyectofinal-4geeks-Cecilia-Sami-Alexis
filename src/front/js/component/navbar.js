@@ -4,6 +4,7 @@ import defaultAvatarUrl from "../../img/defaultAvatar.png"
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import { NuevoViaje } from "./nuevoviaje";
 import { SearchC } from "./search_c";
+import logo from "../../img/logo2.png"
 
 export const Navbar = () => {
 	const navigate = useNavigate()
@@ -30,7 +31,7 @@ export const Navbar = () => {
 		<>
 		<nav className="navbar navbar-expand-lg navbar-expand-xl navbar-light bg-light">
 			<div className="container">
-				<Link className="navbar-brand" to="/">{store.siteName}</Link>
+				<Link className="navbar-brand" to="/"><img src={logo} alt={store.siteName+" logo"} title={store.siteName}/></Link>
 				<button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
 					<span className="navbar-toggler-icon"></span>
 				</button>

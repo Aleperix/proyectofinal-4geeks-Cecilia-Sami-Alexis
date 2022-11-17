@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { Context } from "../store/appContext";
 import { Viajes } from "../component/viajes";
 
+
 export const Home = () => {
 	const { store, actions } = useContext(Context);
 

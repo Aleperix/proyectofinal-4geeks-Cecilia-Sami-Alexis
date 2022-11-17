@@ -1,4 +1,5 @@
 import React from "react";
+import logo from "../../img/logo.png"
 
 export const Nosotros = () => {
   return (
@@ -7,7 +8,7 @@ export const Nosotros = () => {
         <div className="card bg-primary p-3">
           <div className="card-body bg-white">
             <h5 className="card-title text-center">
-              ¿Conoces <em>Fromtony</em>?
+               <img src={logo} alt="logodelaweb"/>
             </h5>
 
             <p className="card-text">

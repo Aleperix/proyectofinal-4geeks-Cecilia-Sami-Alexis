@@ -29,10 +29,10 @@ export const SearchC = () => {
       };
 
 	return (
-		<div class="input-group w-50">
-            <span class="input-group-text" id="basic-addon1"><i className="fas fa-search"></i></span>
+		<div className="input-group w-50">
+            <span className="input-group-text" id="basic-addon1"><i className="fas fa-search"></i></span>
             <input type="email" className="form-control" id="fg-correo" ref={searchInput} placeholder="Ingresa una ciudad" onKeyDown={handleKeyDown} required />
-            <span class="input-group-text" id="basic-addon1" role="button" onClick={() => toggleDropdown()}><i className="fas fa-filter"></i></span>
+            <span className="input-group-text" id="basic-addon1" role="button" onClick={() => toggleDropdown()}><i className="fas fa-filter"></i></span>
             <div className="nav-item dropdown mx-auto">
                 <ul className="dropdown-menu dropdown-menu-bottom" ref={searchDropdown}>
                     <li><Link className="dropdown-item" to={"/perfil/"}><i className="fas fa-user"></i> Prox</Link></li>

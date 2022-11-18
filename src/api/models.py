@@ -45,6 +45,13 @@ class Usuarios(db.Model):
             "activo": self.activo,
             "vehiculos": vehiculos
         }
+    def serializeViaje(self):
+        return {
+            "nombre": self.nombre,
+            "apellido": self.apellido,
+            "url_avatar": self.url_avatar,
+            "preferencias": self.preferencias,
+        }
 
 class Vehiculos(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -53,6 +60,7 @@ class Vehiculos(db.Model):
     modelo = db.Column(db.String(250), nullable=False)
     kms_por_litro = db.Column(db.Integer, nullable=False)
     cantidad_asientos = db.Column(db.Integer, nullable=False)
+    activo = db.Column(db.Boolean(), unique=False, nullable=False)
     viajes = db.relationship('Viajes', backref='vehiculos', lazy=True)
 
     def __repr__(self):
@@ -66,6 +74,7 @@ class Vehiculos(db.Model):
             "modelo": self.modelo,
             "kms_por_litro": self.kms_por_litro,
             "cantidad_asientos": self.cantidad_asientos,
+            "activo": self.activo
             # do not serialize the password, its a security breach
         }
 
@@ -87,10 +96,12 @@ class Viajes(db.Model):
         return f'<Viajes {self.id}>'
 
     def serialize(self):
+        conductor = Usuarios.query.filter_by(id=self.conductor).first()
+        conductor = conductor.serializeViaje()
         return {
             "id": self.id,
             "acerca": self.acerca,
-            "conductor": self.conductor,
+            "conductor": conductor,
             "vehiculo": self.vehiculo,
             "desde": self.desde,
             "hasta": self.hasta,
@@ -106,6 +117,9 @@ class Acompanantes(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     id_usuario = db.Column(db.Integer, db.ForeignKey('usuarios.id'))
     id_viaje = db.Column(db.Integer, db.ForeignKey('viajes.id'))
+    activo = db.Column(db.Boolean(), nullable=False)
+    estado = db.Column(db.String(10), nullable=False)
+    
 
     def __repr__(self):
         return f'<Acompanantes {self.id}>'
@@ -115,6 +129,8 @@ class Acompanantes(db.Model):
             "id": self.id,
             "id_usuario": self.id_usuario,
             "id_viaje": self.id_viaje,
+            "estado": self.id_viaje,
+            "activo": self.activo
             # do not serialize the password, its a security breach
         }
     def serializeViajes(self):

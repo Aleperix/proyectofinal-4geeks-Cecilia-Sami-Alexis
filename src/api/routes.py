@@ -145,7 +145,7 @@ def add_new_user():
     subject = "Por favor, confirma tu cuenta"
     send_email(new_user.correo, subject, html)
     response_body = {
-        "message": "Usuario creado con éxito. Se ha enviado un correo de confirmación a tu correo electrónico",
+        "message": "Usuario agregado con éxito. Se ha enviado un correo de confirmación a tu correo electrónico",
         "status": 200
     }
     return jsonify(response_body), 200
@@ -190,6 +190,29 @@ def forgot_pass():
         "status": 200
     }
     return jsonify(response_body), 200
+
+#Modificamos un usuario dependiendo de su ID
+@api.route("/users/<int:user_id>", methods=["PUT"])
+@jwt_required()
+def modify_user(user_id):
+    user = Usuarios.query.filter_by(id=user_id).first()
+    body = json.loads(request.data)
+
+    if user is None:
+        raise APIException('El usuario que buscas no existe', status_code=404)
+
+    for key in body:
+        for col in user.serialize():
+            if key == col and key != "id":
+                setattr(user, col, body[key])
+    
+    db.session.commit()
+
+    response_body = {
+        "message": "Usuario modificado con éxito",
+        "status": 200
+    }
+    return jsonify(response_body), 200
            ##### Fin Usuarios #####
 
             ##### Inicio Viajes #####
@@ -215,7 +238,6 @@ def add_new_travel():
         if body[i] == None:
             raise APIException('Hay campos vacíos', status_code=204)
     
-    
     new_travel = Viajes(
         acerca=body["acerca"],
         conductor=body["conductor"],
@@ -231,7 +253,7 @@ def add_new_travel():
     db.session.add(new_travel)
     db.session.commit()
     response_body = {
-        "message": "Viaje creado con éxito",
+        "message": "Viaje agregado con éxito",
         "status": 200
     }
     return jsonify(response_body), 200
@@ -258,9 +280,13 @@ def get_one_travel(travel_id):
     if travel is None:
         raise APIException('El viaje que buscas no existe', status_code=404)
 
-    return jsonify(travel.serialize()), 200
+    response_body = {
+        "viaje": travel.serialize(),
+        "status": 200
+    }
+    return jsonify(response_body), 200
 
-# # Modificamos la cantidad de asientos disponibles en el viaje
+#Modificamos un viaje dependiendo de su ID
 @api.route("/viaje/<int:travel_id>", methods=["PUT"])
 @jwt_required()
 def place(travel_id):
@@ -270,27 +296,112 @@ def place(travel_id):
     if travel is None:
         raise APIException('El viaje que buscas no existe', status_code=404)
 
-    travel.asientos_disponibles=body["asientos_disponibles"]
-
-    # travel = Acompanantes.query
-#     place_to_modify = request.json.get("place", None)
-#     user_id = request.json.get("idCompany", None)
-#     usuario = Usuarios.query.filter_by(id=user_id).first()
-
-#     print(placeto_modify)
-#     print(user_id)
-    db.session.add(body)
+    for key in body:
+        for col in travel.serialize():
+            if key == col and key != "id":
+                setattr(travel, col, body[key])
+    
     db.session.commit()
 
-
-    # # if place_to_modify :
-    # #     raise APIException('Usuario o contraseña incorrectos', status_code=401)
-
-
-    # access_token = create_access_token(identity=nombre_usuario)
-    # refresh_token = create_refresh_token(identity=nombre_usuario)
     response_body = {
-        "Añadido al viaje correctamente"
+        "message": "Viaje modificado con éxito",
+        "status": 200
     }
     return jsonify(response_body), 200
-           ##### Fin Viajes #####
+            ##### Fin Viajes #####
+
+            ##### Inicio Vehículos #####
+#Modificamos un usuario dependiendo de su ID
+@api.route('/vehicles/new', methods=['POST'])
+@jwt_required()
+def add_new_vehicle():
+    body = json.loads(request.data)
+
+    for i in body:
+        if body[i] == None:
+            raise APIException('Hay campos vacíos', status_code=204)
+    
+    new_vehicle = Viajes(
+        id_usuario=body["id_usuario"],
+        nombre=body["nombre"],
+        modelo=body["modelo"],
+        kms_por_litro=body["kms_por_litro"],
+        cantidad_asientos=body["cantidad_asientos"])
+
+    db.session.add(new_vehicle)
+    db.session.commit()
+    response_body = {
+        "message": "Vehículo agregado con éxito",
+        "status": 200
+    }
+    return jsonify(response_body), 200
+
+@api.route("/vehicles/<int:acompanante_id>", methods=["PUT"])
+@jwt_required()
+def modify_vehicle(vehicle_id):
+    vehicle = Vehiculos.query.filter_by(id=vehicle_id).first()
+    body = json.loads(request.data)
+
+    if vehicle is None:
+        raise APIException('El acompañante que buscas no existe', status_code=404)
+
+    for key in body:
+        for col in vehicle.serialize():
+            if key == col and key != "id":
+                setattr(vehicle, col, body[key])
+    
+    db.session.commit()
+
+    response_body = {
+        "message": "Vehículo modificado con éxito",
+        "status": 200
+    }
+    return jsonify(response_body), 200
+           ##### Fin Vehículos #####
+
+            ##### Inicio Acompañantes #####
+#Modificamos un usuario dependiendo de su ID
+@api.route('/acompanantes/new', methods=['POST'])
+@jwt_required()
+def add_new_acompanante():
+    body = json.loads(request.data)
+
+    for i in body:
+        if body[i] == None:
+            raise APIException('Hay campos vacíos', status_code=204)
+    
+    new_acompanante = Viajes(
+        id_usuario=body["id_usuario"],
+        id_viaje=body["id_viaje"],
+        estado=body["estado"])
+
+    db.session.add(new_acompanante)
+    db.session.commit()
+    response_body = {
+        "message": "Acompañante agregado con éxito",
+        "status": 200
+    }
+    return jsonify(response_body), 200
+
+@api.route("/acompanantes/<int:acompanante_id>", methods=["PUT"])
+@jwt_required()
+def modify_acompanante(acompanante_id):
+    acompanante = Acompanantes.query.filter_by(id=acompanante_id).first()
+    body = json.loads(request.data)
+
+    if acompanante is None:
+        raise APIException('El acompañante que buscas no existe', status_code=404)
+
+    for key in body:
+        for col in acompanante.serialize():
+            if key == col and key != "id":
+                setattr(acompanante, col, body[key])
+    
+    db.session.commit()
+
+    response_body = {
+        "message": "Acompañante modificado con éxito",
+        "status": 200
+    }
+    return jsonify(response_body), 200
+           ##### Fin Acompañantes #####

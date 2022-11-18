@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 7e6736e49663
+Revision ID: 30cebfd5cdc0
 Revises: 
-Create Date: 2022-11-16 16:57:51.618199
+Create Date: 2022-11-17 18:27:06.997172
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '7e6736e49663'
+revision = '30cebfd5cdc0'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -44,6 +44,7 @@ def upgrade():
     sa.Column('modelo', sa.String(length=250), nullable=False),
     sa.Column('kms_por_litro', sa.Integer(), nullable=False),
     sa.Column('cantidad_asientos', sa.Integer(), nullable=False),
+    sa.Column('activo', sa.Boolean(), nullable=False),
     sa.ForeignKeyConstraint(['id_usuario'], ['usuarios.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
@@ -67,6 +68,8 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('id_usuario', sa.Integer(), nullable=True),
     sa.Column('id_viaje', sa.Integer(), nullable=True),
+    sa.Column('activo', sa.Boolean(), nullable=False),
+    sa.Column('estado', sa.String(length=10), nullable=False),
     sa.ForeignKeyConstraint(['id_usuario'], ['usuarios.id'], ),
     sa.ForeignKeyConstraint(['id_viaje'], ['viajes.id'], ),
     sa.PrimaryKeyConstraint('id')

@@ -15,6 +15,7 @@ import { CambioClave } from "./pages/cambioclave";
 import { Nosotros } from "./pages/nosotros";
 import { Preguntas } from "./pages/preguntas";
 import { Buscador } from "./pages/buscador";
+import { Politicas } from "./pages/politicas";
 import injectContext from "./store/appContext";
 
 
@@ -51,6 +52,7 @@ const Layout = () => {
                         <Route element={<Viaje />} path="/viaje/:id" />
                         <Route element={<Preguntas />} path="/preguntas"/>
 						<Route element={<Buscador />} path="/search"/>
+                        <Route element={<Politicas />} path="/politicas"/>
                         <Route element={<h1>No encontrado!</h1>} />
                         
                     </Routes>

@@ -221,6 +221,19 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
+			formSubmit: async (value) => {
+				const action = getActions();
+				let response = await action.postData(process.env.BACKEND_URL + "/api/form", value);
+				console.log(response);
+				if (!response.hasOwnProperty("code")) {
+					return true;
+				} else {
+					console.log(response);
+					response = response.response;
+					return {message: response.data.message}
+				}
+			},
+
 							// Fin formularios //
 
 							// Fin funciones globales //

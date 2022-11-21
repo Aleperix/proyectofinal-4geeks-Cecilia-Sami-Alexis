@@ -17,26 +17,27 @@ export const ContacForm = () => {
 			consulta: Yup.string().required('Este campo es requerido'),
       
 		}),
-		onSubmit: values => {
+		onSubmit: (values, { resetForm }) => {
 		  console.log(values);
 		  handleSubmit(values)
+      resetForm();
 		},
 	  });
 
 
       const handleSubmit = async (data) => {
 		let submit = await actions.formSubmit(data);
-		if (submit == true) {
-			setLoginError(formSubmit.message);
-     mostrarAlert.current.classList.remove("d-none");
-		} else {
-			setTimeout(() => {
-				mostrarAlert.current.classList.add("d-none");
-			}, 3000);
-			mostrarAlert.current.classList.remove("d-none");
-			setLoginError(formSubmit.message);
-			mostrarAlert.current.scrollIntoView()
-		}
+		// if (submit.status == 200) {
+		// // 	setLoginError(submit.message);
+    // //  mostrarAlert.current.classList.remove("d-none");
+		// } else {
+		// 	setTimeout(() => {
+		// 		mostrarAlert.current.classList.add("d-none");
+		// 	}, 3000);
+		// 	mostrarAlert.current.classList.remove("d-none");
+		// 	setLoginError(submit.message);
+		// 	mostrarAlert.current.scrollIntoView()
+		// }
 	};
 
 
@@ -51,7 +52,7 @@ export const ContacForm = () => {
 
       <form className="row g-3 needs-validation" onSubmit={formik.handleSubmit}>
         <div className="col-md-4">
-          <label htmlFor="name" className="form-label" value={formik.values.nombre}>
+          <label htmlFor="name" className="form-label"  >
             Nombre
           </label>
           <input
@@ -59,9 +60,12 @@ export const ContacForm = () => {
             className="form-control"
             id="name"
             placeholder="escriba su nombre aqui"
-            
+            value={formik.values.nombre}
+            name="nombre"
+            onChange={formik.handleChange} 
+            onBlur={formik.handleBlur}
           />
-          { formik.errors.nombre ? (
+          {formik.touched.nombre && formik.errors.nombre ? (
 								<div className="text-danger">
 									{formik.errors.nombre}
 							   	</div>
@@ -69,7 +73,7 @@ export const ContacForm = () => {
           
         </div>
         <div className="col-md-4">
-          <label htmlFor="apellido" className="form-label" value={formik.values.apellido}>
+          <label htmlFor="apellido" className="form-label" >
             Apellido
           </label>
           <input
@@ -77,6 +81,9 @@ export const ContacForm = () => {
             className="form-control"
             id="apellido"
             placeholder="escriba su apellido aqui"
+            value={formik.values.apellido}
+            onChange={formik.handleChange} 
+            onBlur={formik.handleBlur}
           />
            { formik.errors.apellido ? (
 								<div className="text-danger">
@@ -85,7 +92,7 @@ export const ContacForm = () => {
        						) : null}
         </div>
         <div className="col-md-12">
-          <label htmlFor="email" className="form-label"  value={formik.values.correo}>
+          <label htmlFor="email" className="form-label"  >
             Email
           </label>
           <div className="input-group">
@@ -94,7 +101,10 @@ export const ContacForm = () => {
               className="form-control"
               id="email"
               aria-describedby="inputGroupPrepend"
-              
+              value={formik.values.correo}
+              name="correo"
+              onChange={formik.handleChange} 
+              onBlur={formik.handleBlur}
             />
             <div className="col-md-12">
              { formik.errors.correo ? (
@@ -106,10 +116,11 @@ export const ContacForm = () => {
           </div>
         </div>
         <div className="mb-3">
-          <label htmlFor="consulta" className="form-label" value={formik.values.consulta}>
+          <label htmlFor="consulta" className="form-label" >
             Escribe tu consulta
           </label>
-          <textarea className="form-control" id="consulta" rows="3"></textarea>
+          <textarea className="form-control" id="consulta" rows="3" name="consulta" value={formik.values.consulta} onChange={formik.handleChange} 
+              onBlur={formik.handleBlur}></textarea>
           { formik.errors.consulta ? (
 								<div className="text-danger">
 									{formik.errors.consulta}

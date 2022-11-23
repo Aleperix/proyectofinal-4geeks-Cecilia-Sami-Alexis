@@ -26,7 +26,7 @@ export const Registro = () => {
 			confClave: Yup.string().oneOf([Yup.ref('clave'), null], 'Las contraseñas deben ser iguales').required('Este campo es requerido'),
 			correo: Yup.string().email('Correo electrónico inválido').required('Este campo es requerido'),
 			confCorreo: Yup.string().oneOf([Yup.ref('correo'), null], 'Los correos deben ser iguales').required('Este campo es requerido'),
-			celular: Yup.string().min(9, 'Tu celular debe contener 9 dígitos').max(9, 'Tu celular debe contener 9 dígitos').required('Este campo es requerido'),
+			celular: Yup.string().min(8, 'Tu celular debe contener 8 dígitos').max(9, 'Tu celular debe contener 9 dígitos').required('Este campo es requerido'),
 			departamento: Yup.string().required('Este campo es requerido'),
 			ciudad: Yup.string().min(3, 'La ciudad debe contener 3 caracteres o más').required('Este campo es requerido'),
 			fecha_nacimiento: Yup.date().max(new Date(), '¿Acaso vienes del futuro?').required('Este campo es requerido'),

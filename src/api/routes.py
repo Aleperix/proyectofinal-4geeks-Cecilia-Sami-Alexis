@@ -134,7 +134,7 @@ def add_new_user():
         fecha_nacimiento=body["fecha_nacimiento"].replace("-", ""),
         genero=body["genero"],
         sobre_mi=None,
-        preferencias=None,
+        preferencias="ninguna",
         url_avatar=None,
         confirmado=False,
         activo=1)
@@ -206,8 +206,7 @@ def modify_user(user_id):
     for key in body:
         for col in user.serialize():
             if key == col and key != "id":
-                if body[key] != None or body[key] != "":
-                    setattr(user, col, body[key])
+                setattr(user, col, body[key])
     
     db.session.commit()
 

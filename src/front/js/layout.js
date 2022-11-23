@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ScrollToTop from "./component/scrollToTop";
 
@@ -51,12 +51,7 @@ const Layout = () => {
                         <Route element={<Nosotros />} path="/nosotros"/>
                         <Route element={<Viaje />} path="/viaje/:id" />
                         <Route element={<Preguntas />} path="/preguntas"/>
-<<<<<<< HEAD
 						<Route element={<Buscador />} path="/search/:value"/>
-=======
-						<Route element={<Buscador />} path="/search"/>
-                        <Route element={<Politicas />} path="/politicas"/>
->>>>>>> f428b8c0c834f665d12228ee3520382d0bb9d6b1
                         <Route element={<h1>No encontrado!</h1>} />
                         
                     </Routes>

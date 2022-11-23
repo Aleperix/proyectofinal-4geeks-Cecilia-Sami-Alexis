@@ -73,7 +73,7 @@ export const NuevoViaje = () => {
 										{travelError}
 									</div>
 									<div className="form-floating mt-1">
-										<textarea id="pt-acerca" name="acerca" value={formik.values.acerca} className={formik.touched.acerca && formik.errors.acerca ? "form-control border border-danger bg-danger bg-opacity-25" : "form-control"} placeholder="Ej: Hago este viaje porque quiero visitar las termas de Salto" onChange={formik.handleChange} onBlur={formik.handleBlur}></textarea>
+										<textarea id="pt-acerca" name="acerca" value={formik.values.acerca} className={formik.touched.acerca && formik.errors.acerca ? "form-control border border-danger bg-danger bg-opacity-25" : "form-control"} placeholder="Ej: Hago este viaje porque quiero visitar las termas de Salto" style={{height: "100px"}} onChange={formik.handleChange} onBlur={formik.handleBlur}></textarea>
 										{formik.touched.acerca && formik.errors.acerca ? (
 											<div className="text-danger">
 												{formik.errors.acerca}

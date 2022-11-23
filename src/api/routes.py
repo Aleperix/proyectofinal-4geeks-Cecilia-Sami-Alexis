@@ -206,7 +206,8 @@ def modify_user(user_id):
     for key in body:
         for col in user.serialize():
             if key == col and key != "id":
-                setattr(user, col, body[key])
+                if body[key] != None or body[key] != "":
+                    setattr(user, col, body[key])
     
     db.session.commit()
 
@@ -455,7 +456,7 @@ def get_all_travel_req(user_id):
            ##### Fin Acompañantes #####
 
 #Recepcion y envio de datos del formulario
-@api.route('/form', methods=['POST'])
+@api.route('/contactform', methods=['POST'])
 def send_form():
     body = json.loads(request.data)
 
@@ -465,5 +466,9 @@ def send_form():
     html = render_template('email/contact.html', nombre=body["nombre"],apellido=body["apellido"], correo=body["correo"],consulta=body["consulta"] )
     subject = "Formulario de contacto"
     send_email(current_app.config['MAIL_DEFAULT_SENDER'], subject, html)
-    
-    return jsonify("Consulta o peticion enviada con exito"), 200
+
+    response_body = {
+        "message": "Consulta enviada con éxito",
+        "status": 200
+    }
+    return jsonify(response_body), 200

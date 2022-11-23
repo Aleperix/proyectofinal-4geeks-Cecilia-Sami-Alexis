@@ -130,15 +130,15 @@ export const Viaje = () => {
 										return element == "mate" ? (
 											<span key={index}>
 												<img src="https://i.imgur.com/9vGOpIP.png" alt="foto del mate" width="16px" />
-												Me encanta tomar mate
+												<span className="mx-2">Me encanta tomar mate</span>
 											</span>
 										) : element == "no_fumar" ? (
 											<span key={index}>
-												<i className="fas fa-smoking-ban"></i>Por favor, no fumar en el auto
+												<i className="fas fa-smoking-ban"></i><span className="mx-2">Por favor, no fumar en el auto</span>
 											</span>
 										) : element == "mascotas" ? (
 											<span key={index}>
-												<i className="fas fa-paw"></i>Acepto mascotas pequeñas
+												<i className="fas fa-paw"></i><span className="mx-2">Acepto mascotas pequeñas</span>
 											</span>
 										) : (
 											element

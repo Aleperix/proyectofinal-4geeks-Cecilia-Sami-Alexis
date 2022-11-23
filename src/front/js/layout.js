@@ -7,7 +7,6 @@ import { Login } from "./pages/login";
 import { Registro } from "./pages/registro";
 import { ConfReg } from "./pages/confreg";
 import { Perfil } from "./pages/perfil";
-import { ConfPerfil } from "./pages/confperfil";
 import { Viaje } from "./pages/viaje";
 import { RecupClave } from "./pages/recupclave";
 import { CodigoClave } from "./pages/codigoclave";
@@ -16,6 +15,7 @@ import { Nosotros } from "./pages/nosotros";
 import { Preguntas } from "./pages/preguntas";
 import { Buscador } from "./pages/buscador";
 import { Terminos } from "./pages/terminos";
+import { Politicas } from "./pages/politicas";
 import injectContext from "./store/appContext";
 
 import { Navbar } from "./component/navbar";
@@ -36,7 +36,6 @@ const Layout = () => {
                     <Routes>
                         <Route element={<Home />} path="/"/>
                         <Route element={<Perfil />} path="/perfil/:id" />
-                        <Route element={<ConfPerfil />} path="/confperfil/:id" />
                         <Route element={<Login />} path="/login" />
                         <Route element={<Registro />} path="/register" />
                         <Route element={<ConfReg />} path="/register/confirm" />
@@ -47,6 +46,7 @@ const Layout = () => {
                         <Route element={<Viaje />} path="/viaje/:id" />
                         <Route element={<Preguntas />} path="/faq"/>
                         <Route element={<Terminos />} path="/terminos" />
+                        <Route element={<Politicas />} path="/politicas" />
 						<Route element={<Buscador />} path="/search/:value"/>
                         <Route element={<h1>No encontrado!</h1>} />
                         

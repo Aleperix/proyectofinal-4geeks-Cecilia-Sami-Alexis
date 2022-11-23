@@ -117,7 +117,7 @@ export const Perfil = () => {
 					{store.usuario.id == datosPerfil.perfil?.id ?
 					<div className="mx-4 py-2 bg-secondary bg-opacity-25 border-start border-end border-secondary h-100" id="my-profile-config">
 						<div className="my-4 d-flex justify-content-center">
-							<Link className="d-block text-decoration-none m-2" to={"/confperfil/"+store.usuario.id}>Editar datos personales</Link>
+							<button className="btn btn-dark d-block text-decoration-none m-2" data-bs-toggle="modal" data-bs-target="#confPerfil">Editar datos personales</button>
 						</div>
 					</div>
 					:
@@ -218,6 +218,7 @@ export const Perfil = () => {
 										<th scope="col-1">Hora</th>
 										<th scope="col-1">Conductor</th>
 										<th scope="col-1">Vehículo</th>
+										<th scope="col-1">Asientos</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -231,6 +232,7 @@ export const Perfil = () => {
 											<td>{String(element?.viaje?.hora).substring(0, 2) + ":" + String(element?.viaje?.hora).substring(2, 4)}</td>
 											<td>{element?.viaje?.conductor?.nombre+" "+element?.viaje?.conductor?.apellido}</td>
 											<td>{element?.viaje?.vehiculo}</td>
+											<td>{element?.cantidad_asientos}</td>
 											</tr>
 									)})}
 									</tbody>

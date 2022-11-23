@@ -300,10 +300,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			formSubmit: async (value) => {
 				const action = getActions();
-				let response = await action.postData(process.env.BACKEND_URL + "/api/form", value);
+				let response = await action.postData(process.env.BACKEND_URL + "/api/contactform", value);
 				console.log(response);
 				if (!response.hasOwnProperty("code")) {
-					return true;
+					return response.data;
 				} else {
 					console.log(response);
 					response = response.response;

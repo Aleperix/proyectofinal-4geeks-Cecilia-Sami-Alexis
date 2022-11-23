@@ -1,4 +1,6 @@
 import React, { useContext, useLayoutEffect, useState } from "react";
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import { useLocation, useParams, Link } from "react-router-dom";
 import { Context } from "../store/appContext";
 export const Buscador = () => {
@@ -11,6 +13,16 @@ export const Buscador = () => {
 
 	const searchValue = useParams()
 	const location = useLocation();
+
+	const formik = useFormik({
+		initialValues: {query: searchValue.value},
+		validationSchema: Yup.object({
+			query: Yup.string().required('Este campo es requerido'),
+		}),
+		onSubmit: (values) => {
+		  handleSearch(values.query)
+		},
+  	});
 	
 
 	const handleSearch = async (value) => {
@@ -27,13 +39,8 @@ export const Buscador = () => {
 		}
 	};
 
-	const handleKeyDown = (event) => {
-        if (event.key === 'Enter' && !searchInput == "") {
-			handleSearch(searchInput)
-        }
-	};
-
 	useLayoutEffect(() => {
+		document.title = store.siteName+" - Buscar"
 		setSearchInput(searchValue.value)
 		handleSearch(searchValue.value)
 	}, [location]);
@@ -46,9 +53,14 @@ export const Buscador = () => {
 			<nav className="navbar bg-light my-5">
             <h3 className="d-flex justify-content-center w-100">¿Algún lugar en especial?</h3>
 				<div className="container-fluid">
-					<form className="d-flex justify-content-center w-100" role="search" onSubmit={(e) => e.preventDefault()}>
-						<input value={searchInput} className="form-control me-2" type="text" placeholder="Ciudad" aria-label="Search" onChange={(e) => setSearchInput(e.target.value)} onKeyDown={(e) => handleKeyDown(e)}/>
-						<button className="btn btn-outline-primary mx-2" type="button" onClick={() => handleSearch(searchInput)}>
+					<form className="d-flex justify-content-center w-100" role="search" onSubmit={formik.handleSubmit}>
+						<input id="s-search" name="query" value={formik.values.query} className={formik.touched.query && formik.errors.query ? "form-control border border-danger bg-danger bg-opacity-25 me-2" : "form-control me-2"} type="text" placeholder="Ingresa una ciudad" onChange={formik.handleChange} onBlur={formik.handleBlur} />
+						{formik.touched.query && formik.errors.query ? (
+						<div className="text-danger">
+							{formik.errors.query}
+						</div>
+						) : null}
+						<button className="btn btn-outline-primary mx-2" type="submit">
 							Buscar
 						</button>
 					</form>

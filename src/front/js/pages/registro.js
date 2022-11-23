@@ -3,6 +3,7 @@ import { useLocation, useNavigate, Link } from "react-router-dom";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Context } from "../store/appContext";
+import logo from "../../img/logo3.png"
 
 export const Registro = () => {
 
@@ -28,12 +29,13 @@ export const Registro = () => {
 			celular: Yup.string().min(9, 'Tu celular debe contener 9 dígitos').max(9, 'Tu celular debe contener 9 dígitos').required('Este campo es requerido'),
 			departamento: Yup.string().required('Este campo es requerido'),
 			ciudad: Yup.string().min(3, 'La ciudad debe contener 3 caracteres o más').required('Este campo es requerido'),
-			fecha_nacimiento: Yup.date().nullable().required('Este campo es requerido').max(new Date(), '¿Acaso vienes del futuro?'),
+			fecha_nacimiento: Yup.date().max(new Date(), '¿Acaso vienes del futuro?').required('Este campo es requerido'),
 			genero: Yup.string().required('Este campo es requerido'),
 		}),
 		onSubmit: values => {
-		  console.log(values);
-		  handleSubmit(values)
+			values.celular = Number(values.celular)
+		  	console.log(values);
+		  	handleSubmit(values)
 		},
 	  });
 
@@ -56,11 +58,11 @@ export const Registro = () => {
 	}, [location]);
 
 	return (
-		<div className="contenedor d-flex align-items-center h-100" style={{ backgroundImage: 'url("' + departamentos[depIndex].img + '")', backgroundSize: "cover" }}>
-			<div className="container text-center bg-white" style={{ width: "35rem" }}>
+		<div className="contenedor d-flex align-items-center vh-100" style={{ backgroundImage: 'url("' + departamentos[depIndex].img + '")', backgroundSize: "cover" }}>
+			<div className="container text-center bg-white p-1 h-100" style={{ width: "35rem" }}>
 				{!store.auth ? (
 					<form onSubmit={formik.handleSubmit}>
-						<img className="mb-4" src="https://getbootstrap.com/docs/5.1/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57" />
+						<img className="mb-4" src={logo} alt="Logo Fromtony" />
 						<h1 className="h3 mb-3 fw-normal">Registro</h1>
 						<div className="alert alert-danger d-none" ref={mostrarAlert} role="alert">
 							{loginError}
@@ -116,7 +118,7 @@ export const Registro = () => {
 						<div className="row g-2">
 							<div className="col-md">
 								<div className="form-floating mt-1">
-								<input id="r-clave" name="clave" value={formik.values.clave} className={formik.touched.clave && formik.errors.clave ? "form-control border border-danger bg-danger bg-opacity-25" : "form-control"} type="password" placeholder="Ej: Algo que recuerdes muy bien" onChange={formik.handleChange} onBlur={formik.handleBlur} />
+									<input id="r-clave" name="clave" value={formik.values.clave} className={formik.touched.clave && formik.errors.clave ? "form-control border border-danger bg-danger bg-opacity-25" : "form-control"} type="password" placeholder="Ej: Algo que recuerdes muy bien" onChange={formik.handleChange} onBlur={formik.handleBlur} />
 										{formik.touched.clave && formik.errors.clave ? (
 											<div className="text-danger">
 												{formik.errors.clave}
@@ -186,7 +188,7 @@ export const Registro = () => {
 							</div>
 							<div className="col-md">
 								<div className="form-floating mt-1">
-									<input id="r-ciudad" name="ciudad" value={formik.values.ciudad} className={formik.touched.ciudad && formik.errors.ciudad ? "form-control border border-danger bg-danger bg-opacity-25" : "form-control"} type="text" placeholder="Ej: Juantony55" onChange={formik.handleChange} onBlur={formik.handleBlur} />
+									<input id="r-ciudad" name="ciudad" value={formik.values.ciudad} className={formik.touched.ciudad && formik.errors.ciudad ? "form-control border border-danger bg-danger bg-opacity-25" : "form-control"} type="text" placeholder="Ej: Carrasco" onChange={formik.handleChange} onBlur={formik.handleBlur} />
 										{formik.touched.ciudad && formik.errors.ciudad ? (
 											<div className="text-danger">
 												{formik.errors.ciudad}

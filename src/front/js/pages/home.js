@@ -18,10 +18,10 @@ export const Home = () => {
 			<div className="bg-white text-primary p-5 text-center text-sm-start">
 				<div className="container">
 					<div className="d-flex justify-content-between">
-						<div className="mt-5">
+						<div className="mt-5 w-75">
 							<h1> Económico, ecológico y divertido. </h1>
-							<p className="lead text-secondary"> Fromtony es una iniciativa creada con el objetivo de reducir el número de automóviles en la carretera, ayudando así a reducir las emisiones de CO2 y compartir los gastos de aquella persona que utiliza su coche todos los días. A través de una plataforma digital ponemos en contacto a conductores y pasajeros para que puedan compartir sus trayectos en auto .</p>
-							<button type="button" className="btn btn-primary btn-lg">
+							<p className="lead text-secondary text-break"> Fromtony es una iniciativa creada con el objetivo de reducir el número de automóviles en la carretera, ayudando así a reducir las emisiones de Co2 y compartir los gastos de aquella persona que utiliza su coche todos los días. A través de una plataforma digital ponemos en contacto a conductores y pasajeros para que puedan compartir sus trayectos en vehículo.</p>
+							<button type="button" className="btn btn-primary btn-lg mb-2">
 								Más información
 							</button>
 						</div>
@@ -43,8 +43,8 @@ export const Home = () => {
 							<div className="card" style={{ maxWidth: "28rem" }}>
 								<img src="https://imgur.com/aJjTFph.jpg" className="card-img-top" alt=" portada pasajeros " />
 								<div className="card-body">
-									<h5 className="card-title"> Elegí un conductor. </h5>
-									<p className="card-text text-secondary">Enviás tu solicitud a conductores que puedan llevarte. Podés buscar viajes inmediatos o agendar cuándo viajar.</p>
+									<h5 className="card-title"> Elije un conductor. </h5>
+									<p className="card-text text-secondary">Envías tu solicitud a conductores que puedan llevarte. Puedes buscar viajes inmediatos o agendar cuándo viajar.</p>
 								</div>
 							</div>
 						</div>
@@ -52,7 +52,7 @@ export const Home = () => {
 							<div className="card" style={{ maxWidth: "28rem" }}>
 								<img src="https://imgur.com/S8vYnVH.jpg" className="card-img-top" alt=" portada conductores " />
 								<div className="card-body">
-									<h5 className="card-title">Elegí tu pasajero.</h5>
+									<h5 className="card-title">Elije tu pasajero.</h5>
 									<p className="card-text text-secondary">Te llegarán solicitudes de pasajeros y verás cuanto dinero podrás ahorrar compartiendo el viaje.</p>
 								</div>
 							</div>

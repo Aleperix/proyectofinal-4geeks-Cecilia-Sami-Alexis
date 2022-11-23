@@ -158,6 +158,7 @@ class Acompanantes(db.Model):
             "id": self.id,
             "usuario": usuario,
             "viaje": viaje,
+            "cantidad_asientos": self.cantidad_asientos,
             "estado": self.estado,
             "visto": self.visto,
             "activo": self.activo

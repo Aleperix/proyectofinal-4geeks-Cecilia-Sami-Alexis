@@ -16,32 +16,21 @@ export const Login = () => {
   const location = useLocation();
 
   const formik = useFormik({
-		initialValues: {usuario: '', contraseña: ''},
+		initialValues: {nombre_usuario: '', clave: ''},
 		validationSchema: Yup.object({
-			usuario: Yup.string().min(2, 'Tu usuario debe contener 2 caracteres o más').required('El nombre es requerido'),
-			contraseña: Yup.string().min(6, 'Tu contraseña debe contener 6 caracteres o más').required('Este campo es requerido'),
-      
+			nombre_usuario: Yup.string().required('Este campo es requerido'),
+			clave: Yup.string().required('Este campo es requerido'),
 		}),
 		onSubmit: (values, { resetForm }) => {
-		  console.log(values);
 		  handleSubmit(values)
       resetForm();
 		},
-	  });
+  });
 
-
-
-  const handleSubmit = async (formik)=>{
-    let onLogged = await actions.login({"nombre_usuario":formik.values.usuario, "clave":formik.values.contraseña});
-    if (usuario == "" || clave == ""){
-        setTimeout(() => {mostrarAlert.current.classList.add('d-none')}, 3000);
-        mostrarAlert.current.classList.remove('d-none');
-        setLoginError('Hay campos vacíos');
-    }
-    else if (onLogged == true) {
+  const handleSubmit = async (values)=>{
+    let onLogged = await actions.login(values);
+    if (onLogged == true) {
         navigate("/")
-        setUsuario("")
-        setClave("")
     }else{
         setTimeout(() => {mostrarAlert.current.classList.add('d-none')}, 3000);
         mostrarAlert.current.classList.remove('d-none');
@@ -58,24 +47,34 @@ export const Login = () => {
       <div className="container text-center" style={{width: "25rem"}}>
         {!store.auth ?
         <form className="bg-white p-3" onSubmit={formik.handleSubmit}>
-          <img className="mb-4" src={logo} alt="" />
+          <img className="mb-4" src={logo} alt="Logo Fromtony"/>
           <h1 className="h3 mb-3 fw-normal">Iniciar sesión</h1>
           <div className="alert alert-danger d-none" ref={mostrarAlert} role="alert">{loginError}</div>
-          <div className="form-floating">
-            <input value={formik.values.usuario} type="email" className="form-control" id="l-usuario" placeholder="miusuario"  onChange={formik.handleChange} onBlur={formik.handleBlur}/>
-            <label htmlFor="l-usuario">Usuario</label>
-          </div>
-          <div className="form-floating pt-1">
-            <input value={formik.values.contraseña} type="password" className="form-control" id="l-contraseña" placeholder="micontraseña" onChange={formik.handleChange} onBlur={formik.handleBlur}/>
-            <label htmlFor="l-contraseña">Contraseña</label>
-          </div>
+            <div className="form-floating">
+              <input id="l-nombre_usuario" name="nombre_usuario" value={formik.values.nombre_usuario} className={formik.touched.nombre_usuario && formik.errors.nombre_usuario ? "form-control border border-danger bg-danger bg-opacity-25" : "form-control"} type="text" placeholder="Tu usuario" onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                {formik.touched.nombre_usuario && formik.errors.nombre_usuario ? (
+                  <div className="text-danger">
+                    {formik.errors.nombre_usuario}
+                  </div>
+                ) : null}
+              <label htmlFor="l-nombre_usuario">Usuario</label>
+            </div>
+            <div className="form-floating mt-1">
+              <input id="l-clave" name="clave" value={formik.values.clave} className={formik.touched.clave && formik.errors.clave ? "form-control border border-danger bg-danger bg-opacity-25" : "form-control"} type="password" placeholder="Tu contraseña" onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                {formik.touched.clave && formik.errors.clave ? (
+                  <div className="text-danger">
+                    {formik.errors.clave}
+                  </div>
+                ) : null}
+              <label htmlFor="l-clave">Contraseña</label>
+            </div>
           <div className="mb-3 mt-1 d-flex justify-content-between">
             <label>
               <input type="checkbox" value="remember-me"/> Recuérdame
             </label>
-            <a href="/forgot">Olvidé mi contraseña</a>
+            <Link to="/forgot">Olvidé mi contrseña</Link>
           </div>
-          <button className="w-100 btn btn-lg btn-primary mb-2" onClick={() => handleSubmit()} type="button">Entrar</button>
+          <button className="w-100 btn btn-lg btn-primary mb-2" type="submit">Entrar</button>
           <span>¿Aún no tienes cuenta? <Link to="/register">Regístrate!</Link></span>
         </form>
         :

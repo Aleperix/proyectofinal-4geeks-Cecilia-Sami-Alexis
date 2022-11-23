@@ -4,132 +4,100 @@ import * as Yup from 'yup';
 import { Context } from "../store/appContext";
 export const ContacForm = () => {
     const { store, actions } = useContext(Context);
-    const [loginError, setLoginError] = useState("");
-    const mostrarAlert = useRef("");
+    const [loginError, setLoginError] = useState();
+    const mostrarAlert = useRef();
     
 
     const formik = useFormik({
 		initialValues: {nombre: '', apellido: '',  correo: '',  consulta: ''},
 		validationSchema: Yup.object({
-			nombre: Yup.string().min(2, 'Tu nombre debe contener 2 caracteres o más').required('El nombre es requerido'),
-			apellido: Yup.string().min(2, 'Tu apellido debe contener 2 caracteres o más').required('El apellido es requerido'),
-			correo: Yup.string().email('Correo electrónico inválido').required('Necesitas una cuenta de correo para enviarte la respuesta'),
-			consulta: Yup.string().required('Este campo es requerido'),
+			nombre: Yup.string().min(2, 'El nombre debe contener 2 caracteres o más').required('Este campo es requerido'),
+			apellido: Yup.string().min(2, 'El apellido debe contener 2 caracteres o más').required('Este campo es requerido'),
+			correo: Yup.string().email('Correo electrónico inválido').required('Este campo es requerido'),
+			consulta: Yup.string().min(50, 'La consulta debe contener 50 caracteres o más').required('Este campo es requerido'),
       
 		}),
 		onSubmit: (values, { resetForm }) => {
-		  console.log(values);
 		  handleSubmit(values)
       resetForm();
 		},
 	  });
 
 
-      const handleSubmit = async (data) => {
-		let submit = await actions.formSubmit(data);
-		// if (submit.status == 200) {
-		// // 	setLoginError(submit.message);
-    // //  mostrarAlert.current.classList.remove("d-none");
-		// } else {
-		// 	setTimeout(() => {
-		// 		mostrarAlert.current.classList.add("d-none");
-		// 	}, 3000);
-		// 	mostrarAlert.current.classList.remove("d-none");
-		// 	setLoginError(submit.message);
-		// 	mostrarAlert.current.scrollIntoView()
-		// }
+    const handleSubmit = async (data) => {
+      let response = await actions.formSubmit(data);
+      if (response.status == 200) {
+        setTimeout(() => {mostrarAlert.current.classList.add('d-none'), mostrarAlert.current.classList.remove('alert-success')}, 3000);
+        mostrarAlert.current.classList.remove('d-none');
+        mostrarAlert.current.classList.add('alert-success');
+        setLoginError(response.message);
+      }else{
+        setTimeout(() => {mostrarAlert.current.classList.add('d-none'), mostrarAlert.current.classList.remove('alert-danger')}, 5000);
+        mostrarAlert.current.classList.remove('d-none');
+        mostrarAlert.current.classList.add('alert-danger')
+        setLoginError(response.message);
+      }
 	};
 
 
   return (
-    <div className="container mt-4">
-       
-      
-      <h5>Formulario de Contacto</h5>
-      <div className="alert alert-danger d-none" ref={mostrarAlert} role="alert">
-							{loginError}
-			</div>
-
+    <div className="container mt-5">
+      <div className="text-center">
+        <h3>¿Te quedó alguna duda?</h3>
+        <div className="alert d-none" ref={mostrarAlert} role="alert">{loginError}</div>
+      </div>
       <form className="row g-3 needs-validation" onSubmit={formik.handleSubmit}>
-        <div className="col-md-4">
-          <label htmlFor="name" className="form-label"  >
-            Nombre
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="name"
-            placeholder="escriba su nombre aqui"
-            value={formik.values.nombre}
-            name="nombre"
-            onChange={formik.handleChange} 
-            onBlur={formik.handleBlur}
-          />
-          {formik.touched.nombre && formik.errors.nombre ? (
-								<div className="text-danger">
-									{formik.errors.nombre}
-							   	</div>
-       						) : null}
-          
-        </div>
-        <div className="col-md-4">
-          <label htmlFor="apellido" className="form-label" >
-            Apellido
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="apellido"
-            placeholder="escriba su apellido aqui"
-            value={formik.values.apellido}
-            onChange={formik.handleChange} 
-            onBlur={formik.handleBlur}
-          />
-           { formik.errors.apellido ? (
-								<div className="text-danger">
-									{formik.errors.apellido}
-							   	</div>
-       						) : null}
-        </div>
-        <div className="col-md-12">
-          <label htmlFor="email" className="form-label"  >
-            Email
-          </label>
-          <div className="input-group">
-            <input
-              type="email"
-              className="form-control"
-              id="email"
-              aria-describedby="inputGroupPrepend"
-              value={formik.values.correo}
-              name="correo"
-              onChange={formik.handleChange} 
-              onBlur={formik.handleBlur}
-            />
-            <div className="col-md-12">
-             { formik.errors.correo ? (
-								<div className="text-danger">
-									{formik.errors.correo}
-							   	</div>
-       						) : null}
-            </div>
+      <div className="row g-2">
+        <div className="col-md">
+          <div className="form-floating mt-1">
+            <input id="c-nombre" name="nombre" value={formik.values.nombre} className={formik.touched.nombre && formik.errors.nombre ? "form-control border border-danger bg-danger bg-opacity-25" : "form-control"} type="text" placeholder="Ej: Juan" onChange={formik.handleChange} onBlur={formik.handleBlur} />
+              {formik.touched.nombre && formik.errors.nombre ? (
+                <div className="text-danger">
+                  {formik.errors.nombre}
+                </div>
+              ) : null}
+            <label htmlFor="c-nombre">Nombre</label>
           </div>
         </div>
-        <div className="mb-3">
-          <label htmlFor="consulta" className="form-label" >
-            Escribe tu consulta
-          </label>
-          <textarea className="form-control" id="consulta" rows="3" name="consulta" value={formik.values.consulta} onChange={formik.handleChange} 
-              onBlur={formik.handleBlur}></textarea>
-          { formik.errors.consulta ? (
-								<div className="text-danger">
-									{formik.errors.consulta}
-							   	</div>
-       						) : null}
+        <div className="col-md">
+          <div className="form-floating mt-1">
+            <input id="c-apellido" name="apellido" value={formik.values.apellido} className={formik.touched.apellido && formik.errors.apellido ? "form-control border border-danger bg-danger bg-opacity-25" : "form-control"} type="text" placeholder="Ej: Pérez" onChange={formik.handleChange} onBlur={formik.handleBlur} />
+              {formik.touched.apellido && formik.errors.apellido ? (
+                <div className="text-danger">
+                  {formik.errors.apellido}
+                </div>
+              ) : null}
+            <label htmlFor="c-apellido">Apellido</label>
+          </div>
         </div>
+        <div className="col-md">
+          <div className="form-floating mt-1">
+            <input id="c-correo" name="correo" value={formik.values.correo} className={formik.touched.correo && formik.errors.correo ? "form-control border border-danger bg-danger bg-opacity-25" : "form-control"} type="text" placeholder="Ej: juanperez@dominio.tld" onChange={formik.handleChange} onBlur={formik.handleBlur} />
+              {formik.touched.correo && formik.errors.correo ? (
+                <div className="text-danger">
+                  {formik.errors.correo}
+                </div>
+              ) : null}
+            <label htmlFor="c-correo">Correo</label>
+          </div>
+        </div>
+      </div>
+      <div className="row g-2">
+        <div className="col-md">
+          <div className="form-floating mt-1">
+            <textarea id="c-consulta" name="consulta" rows="3" value={formik.values.consulta} className={formik.touched.consulta && formik.errors.consulta ? "form-control border border-danger bg-danger bg-opacity-25" : "form-control"} type="text" placeholder="Ej: No se como registrarme en el sitio" style={{height: "150px"}} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+              {formik.touched.consulta && formik.errors.consulta ? (
+                <div className="text-danger">
+                  {formik.errors.consulta}
+                </div>
+              ) : null}
+            <label htmlFor="c-consulta">Consulta</label>
+          </div>
+        </div>
+      </div>
         
         <div className="col-12">
-          <button className="btn btn-primary" type="submit" onClick={console.log("funciono")}>
+          <button className="btn btn-primary d-flex mx-auto" type="submit">
             Enviar
           </button>
         </div>

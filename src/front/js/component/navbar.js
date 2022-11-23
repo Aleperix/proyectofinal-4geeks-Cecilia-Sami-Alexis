@@ -27,7 +27,7 @@ export const Navbar = () => {
 	return (
 		useLocation().pathname != "/login" ? useLocation().pathname != "/register" ?
 		<>
-		<nav className="navbar navbar-expand-lg navbar-expand-xl navbar-light bg-light">
+		<nav className="navbar navbar-expand-lg navbar-expand-xl navbar-light bg-light top-0 position-sticky" style={{zIndex: "99"}}>
 			<div className="container">
 				<Link className="navbar-brand" to="/"><img src={logo} alt={store.siteName+" logo"} title={store.siteName}/></Link>
 				<button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -65,7 +65,7 @@ export const Navbar = () => {
 							</a>
 							<ul className="dropdown-menu dropdown-menu-end">
 								<li><Link className="dropdown-item" to={"/perfil/"+store.usuario.id}><i className="fas fa-user"></i> Perfil</Link></li>
-								<li><Link className="dropdown-item" to={"/confperfil/"+store.usuario.id}><i className="fas fa-cog"></i> Configuración de cuenta</Link></li>
+								<li><button className="dropdown-item" data-bs-toggle="modal" data-bs-target="#confPerfil"><i className="fas fa-cog"></i> Configuración de cuenta</button></li>
 								<li role="button" data-bs-toggle="modal" data-bs-target="#logoutadvert"><span className="dropdown-item"><i className="fas fa-sign-out-alt"></i> Cerrar Sesión</span></li>
 							</ul>
 						</li>

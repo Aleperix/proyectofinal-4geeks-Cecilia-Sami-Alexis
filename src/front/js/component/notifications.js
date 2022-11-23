@@ -2,7 +2,7 @@ import React, {useContext, useLayoutEffect} from "react";
 import {Context} from "../store/appContext";
 import {Link, useLocation} from "react-router-dom";
 
-export const Notifications = () => {
+export const Notifications = (props) => {
 	const {store, actions}= useContext(Context)
 
     const location = useLocation();
@@ -36,12 +36,12 @@ export const Notifications = () => {
 	}, [location]);
 
 	return (
-		<li className="nav-item dropdown">
+		<li className={props.mobile == false ? 'nav-item dropdown d-xl-none d-lg-none' : 'nav-item dropdown d-none d-lg-block d-xl-block'}>
             <a className="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <i className="fas fa-bell" title="Notificaciones"><span className={store.userReq.length != 0 || store.viajesReq.length != 0 ? "position-absolute start-75 translate-middle badge rounded-pill bg-danger" : "d-none"} style={{fontSize: "8px"}}>{store.userReq.length+store.viajesReq.length}</span></i>
+                {!props.mobile == false ? <i className="fas fa-bell" title="Notificaciones"></i> : <span title="Notificaciones">Notificaciones</span>}<span className={store.userReq.length != 0 || store.viajesReq.length != 0 ? "position-absolute start-75 translate-middle badge rounded-pill bg-danger" : "d-none"} style={{fontSize: "8px"}}>{store.userReq.length+store.viajesReq.length}</span>
             </a>
             <ul className="dropdown-menu dropdown-menu-end">
-                {store.userReq.length != 0 && <span className="d-flex justify-content-center"><b>Acompañante</b></span>}
+                {store.userReq.length != 0 && <span className="d-flex justify-content-center text-break"><b>Acompañante</b></span>}
                 {store.userReq.map((element, index) => {
 											return(
                                                 element.estado == "aceptada" ? <li key={index} onClick={() => modifyReqStatus(element.id, "vista")}><Link className="dropdown-item" to={"/viaje/"+element.viaje.id} title={"Ir al viaje #"+element.viaje.id}>&#10004;{" "+element.viaje.conductor.nombre+" "+element.viaje.conductor.apellido+" "}ha aceptado tu solicutd</Link></li>:

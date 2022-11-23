@@ -39,6 +39,7 @@ export const ConfReg = () => {
     }
 
     useLayoutEffect(() => {
+        window.scrollTo(0, 0)
 		document.title = store.siteName+" - Confirmar registro"
 	}, [location]);
 

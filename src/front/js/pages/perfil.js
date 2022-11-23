@@ -96,6 +96,7 @@ export const Perfil = () => {
 	}, []);
 
 	useLayoutEffect(() => {
+		window.scrollTo(0, 0)
 		document.title = store.siteName+" - Perfil de "+store.usuario.nombre_usuario
 	}, [location]);
 	return (

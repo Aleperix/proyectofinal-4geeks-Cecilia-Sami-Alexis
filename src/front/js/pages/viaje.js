@@ -82,15 +82,12 @@ export const Viaje = () => {
 		getAcompStatus()
 	}, []);
 	useLayoutEffect(() => {
+		window.scrollTo(0, 0)
 		document.title = store.siteName+" - Viaje #"+idViaje.id
 		getTravelData(idViaje.id);
 		getAcompStatus()
 	}, [location]);
 
-	console.log(esConductor);
-	console.log(store.usuario.id);
-	// return(<h1>Hola</h1>)
-	console.log(unitStatus);
 	return (
 		<>
 			{store.auth ? (
@@ -159,12 +156,14 @@ export const Viaje = () => {
   								<span className="d-block">Tu solicitud ha sido aceptada por el conductor</span>
 								  <a className="link-success h3" href={"https://wa.me/598"+datosViaje?.viaje?.conductor?.celular+"?text=Hola "+datosViaje?.viaje?.conductor?.nombre+", soy "+store.usuario.nombre+" de Fromtony. Gracias por aceptarme en el viaje %23"+idViaje.id} target="_blank"><i className="bi bi-whatsapp mx-2"></i></a><a className="link-danger h3" href={"mailto:"+datosViaje?.viaje?.conductor?.correo}><i className="bi bi-envelope mx-2"></i></a>
 							</div>
-							
 							: unitStatus == "rechazada" ?
 							<div className="alert alert-danger mx-auto w-50" role="alert">
   								Tu solicitud ha sido rechazada por el conductor
 							</div>
-							
+							: datosViaje?.viaje?.asientos_disponibles == 0  ?
+							<div className="alert alert-danger mx-auto w-50" role="alert">
+								No quedan lugares disponibles para este viaje
+							</div>
 							:
 							!unitStatus &&
 							<div className="d-flex mx-auto ">

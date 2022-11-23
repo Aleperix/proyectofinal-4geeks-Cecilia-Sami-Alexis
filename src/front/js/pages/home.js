@@ -10,6 +10,7 @@ export const Home = () => {
 	const location = useLocation();
 
 	useLayoutEffect(() => {
+		window.scrollTo(0, 0)
 		document.title = store.siteName+" - Hasta el infinito y más allá"
 	}, [location]);
 
@@ -18,10 +19,10 @@ export const Home = () => {
 			<div className="bg-white text-primary p-5 text-center text-sm-start">
 				<div className="container">
 					<div className="d-flex justify-content-between">
-						<div className="mt-5 w-75">
+						<div className="my-5 w-75">
 							<h1> Económico, ecológico y divertido. </h1>
 							<p className="lead text-secondary text-break"> Fromtony es una iniciativa creada con el objetivo de reducir el número de automóviles en la carretera, ayudando así a reducir las emisiones de Co2 y compartir los gastos de aquella persona que utiliza su coche todos los días. A través de una plataforma digital ponemos en contacto a conductores y pasajeros para que puedan compartir sus trayectos en vehículo.</p>
-							<Link type="button" className="btn btn-primary btn-lg mb-2" to="/nosotros">
+							<Link type="button" className="btn btn-primary btn-lg" to="/nosotros">
 								Más información
 							</Link>
 						</div>

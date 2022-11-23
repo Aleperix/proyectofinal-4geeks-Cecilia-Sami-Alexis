@@ -44,6 +44,7 @@ export const RecupClave = () => {
 	};
 
 	useLayoutEffect(() => {
+		window.scrollTo(0, 0)
 		document.title = store.siteName+" - Olvidé mi contraseña"
 	}, [location]);
 

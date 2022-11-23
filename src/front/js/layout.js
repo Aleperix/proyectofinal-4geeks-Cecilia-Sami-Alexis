@@ -49,7 +49,6 @@ const Layout = () => {
                         <Route element={<Politicas />} path="/politicas" />
 						<Route element={<Buscador />} path="/search/:value"/>
                         <Route element={<h1>No encontrado!</h1>} />
-                        
                     </Routes>
                     <Footer />
                 </ScrollToTop>

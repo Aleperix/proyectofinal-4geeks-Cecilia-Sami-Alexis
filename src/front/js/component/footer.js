@@ -9,23 +9,23 @@ export const Footer = () => {
 		useLocation().pathname != "/login" ? useLocation().pathname != "/register" ?
 			<>
 			<ConfPerfil/>
-			<footer className="footer">
-				<div className="row d-flex justify-content-center flex-xs-wrap flex-sm-wrap flex-md-wrap px-5 pt-5 bg-light text-primary">
+			<footer className="footer w-100">
+				<div className="row d-flex justify-content-center flex-xs-wrap flex-sm-wrap flex-md-wrap px-5 pt-5 bg-light text-primary w-100">
 					<div className="text-xs-start text-sm-start text-md-center text-lg-center text-xl-center col mt-2">
 						<p className="h5">Viajes Compartidos.</p>
 						<img src={logo} alt="Logo Fromtony" width="30%"/>
 					</div>
-					<div className="col mt-2">
+					<div className="col mt-3">
 						<p className="h5 mb-1">Contacto</p>
 						<span className="text-secondary text-decoration-none d-block">webmaster@fromtony.com.uy</span>
 						<span className="text-secondary text-decoration-none d-block">+598 97 654 321</span>
 					</div>
-					<div className="col mt-2" >
+					<div className="col mt-3" >
 						<p className="h5 mb-1" >Acerca de</p> 
 						<Link className="text-secondary text-decoration-none d-block" to="/nosotros">Sobre Nosotros</Link>
 						<Link className="text-secondary text-decoration-none d-block" to="/faq">Ayuda y preguntas</Link>
 					</div>
-					<div className="col mt-2">
+					<div className="col mt-3">
 						<p className="h5 mb-1">Terminos y Políticas</p>
 						<Link className="text-secondary text-decoration-none d-block" to="/terminos">Condiciones de Uso</Link>
 						<Link className="text-secondary text-decoration-none d-block" to="/politicas">Políticas de Privacidad</Link>

@@ -1,4 +1,4 @@
-import React, {useContext, useLayoutEffect} from "react";
+import React, {useContext, useLayoutEffect, useEffect} from "react";
 import { useLocation } from "react-router-dom";
 import {Context} from "../store/appContext";
 import logo from "../../img/logo.png"
@@ -9,6 +9,7 @@ export const Nosotros = () => {
   const location = useLocation();
 
   useLayoutEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
 		document.title = store.siteName+" - Nosotros"
 	}, [location]);
 
@@ -41,7 +42,7 @@ export const Nosotros = () => {
       </div>
       <br />
       <h5 className="text-center">
-        En nuetro grupo de innovadores se encuentran:{" "}
+        En nuestro equipo se encuentran:{" "}
       </h5>
         <div className="d-flex flex-wrap flex-row justify-content-center">
           <div className="card m-2  d-flexd justify-content-center" style={{ width: "18rem" }}>

@@ -40,6 +40,7 @@ export const Buscador = () => {
 	};
 
 	useLayoutEffect(() => {
+		window.scrollTo(0, 0)
 		document.title = store.siteName+" - Buscar"
 		setSearchInput(searchValue.value)
 		handleSearch(searchValue.value)
@@ -48,8 +49,7 @@ export const Buscador = () => {
 	console.log(noData);
 
 	return (
-		<div className="container">
-            
+		<div className="container vh-100">
 			<nav className="navbar bg-light my-5">
             <h3 className="d-flex justify-content-center w-100">¿Algún lugar en especial?</h3>
 				<div className="container-fluid">

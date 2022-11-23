@@ -453,3 +453,17 @@ def get_all_travel_req(user_id):
 
     return jsonify(results), 200
            ##### Fin Acompañantes #####
+
+#Recepcion y envio de datos del formulario
+@api.route('/form', methods=['POST'])
+def send_form():
+    body = json.loads(request.data)
+
+
+    if body["correo"] is None:
+        raise APIException('Se necesita un correo', status_code=404)
+    html = render_template('email/contact.html', nombre=body["nombre"],apellido=body["apellido"], correo=body["correo"],consulta=body["consulta"] )
+    subject = "Formulario de contacto"
+    send_email(current_app.config['MAIL_DEFAULT_SENDER'], subject, html)
+    
+    return jsonify("Consulta o peticion enviada con exito"), 200

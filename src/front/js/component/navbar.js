@@ -3,13 +3,13 @@ import {Context} from "../store/appContext";
 import defaultAvatarUrl from "../../img/defaultAvatar.png"
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import { NuevoViaje } from "./nuevoviaje";
-import { SearchC } from "./search_c";
 import logo from "../../img/logo2.png"
+import { Notifications } from "./notifications";
 
 export const Navbar = () => {
 	const navigate = useNavigate()
 	const {store, actions}= useContext(Context)
-	const searchDropdown = useRef()
+	const searchInput = useRef()
 
 	const handleLogout = ()=>{
 		let onLogged = actions.logout();
@@ -18,25 +18,26 @@ export const Navbar = () => {
 		}
 	}
 
-	const toggleDropdown = ()=> {
-		if (!searchDropdown.current.classList.contains("show")) {
-			searchDropdown.current.classList.add('show');
-		} else {
-			searchDropdown.current.classList.remove('show');
-		}
-	  }
+	const handleKeyDown = (event) => {
+        if (event.key === 'Enter' && !searchInput.current.value == "") {
+			navigate("/search/"+searchInput.current.value)
+        }
+	};
 
 	return (
 		useLocation().pathname != "/login" ? useLocation().pathname != "/register" ?
 		<>
-		<nav className="navbar navbar-expand-lg navbar-expand-xl navbar-light bg-light">
+		<nav className="navbar navbar-expand-lg navbar-expand-xl navbar-light bg-light top-0 position-sticky" style={{zIndex: "99"}}>
 			<div className="container">
 				<Link className="navbar-brand" to="/"><img src={logo} alt={store.siteName+" logo"} title={store.siteName}/></Link>
 				<button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
 					<span className="navbar-toggler-icon"></span>
 				</button>
-				<SearchC/>
 				<div className="collapse navbar-collapse" id="navbarNavDropdown">
+				<div className="input-group w-50">
+					<span className="input-group-text" id="basic-addon1"><i className="fas fa-search"></i></span>
+					<input type="text" className="form-control" id="nb-search" ref={searchInput} placeholder="Ingresa una ciudad" onKeyDown={handleKeyDown} required />
+				</div>
 				{!store.auth ?
 					<ul className="navbar-nav ms-auto">
 						<li className="nav-item d-none d-lg-block d-xl-block">
@@ -54,9 +55,6 @@ export const Navbar = () => {
 					</ul>
 						:
 					<ul className="navbar-nav ms-auto">
-						{/* <li className="nav-item">
-							<Link className="nav-link active text-secondary" aria-current="page" to="/search">Buscar</Link>
-						</li> */}
 						<li className="nav-item">
 							<span className="nav-link active text-secondary" aria-current="page" data-bs-toggle="modal" data-bs-target="#postTravel" role="button">Publicar un Viaje</span>
 						</li>
@@ -67,11 +65,13 @@ export const Navbar = () => {
 							</a>
 							<ul className="dropdown-menu dropdown-menu-end">
 								<li><Link className="dropdown-item" to={"/perfil/"+store.usuario.id}><i className="fas fa-user"></i> Perfil</Link></li>
-								<li><Link className="dropdown-item" to={"/confperfil/"+store.usuario.id}><i className="fas fa-cog"></i> Configuración de cuenta</Link></li>
+								<li><button className="dropdown-item" data-bs-toggle="modal" data-bs-target="#confPerfil"><i className="fas fa-cog"></i> Configuración de cuenta</button></li>
 								<li role="button" data-bs-toggle="modal" data-bs-target="#logoutadvert"><span className="dropdown-item"><i className="fas fa-sign-out-alt"></i> Cerrar Sesión</span></li>
 							</ul>
-						</li>						
-					</ul>}
+						</li>
+						<Notifications/>					
+					</ul>
+					}
 				</div>
 			</div>
 		</nav>

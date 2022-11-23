@@ -1,18 +1,30 @@
-import React, { useContext, useState, useEffect, useRef } from "react";
+import React, { useContext, useState, useLayoutEffect, useRef } from "react";
+import {useLocation, useNavigate} from "react-router-dom";
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import { Context } from "../store/appContext";
-import {Link, useLocation, useNavigate} from "react-router-dom";
+import logo from "../../img/logo3.png"
 
 export const ConfReg = () => {
-	const { actions } = useContext(Context);
-    const codigo = useRef()
+	const { store, actions } = useContext(Context);
     const [confRegMsg, setConfRegMsg] = useState("");
     const mostrarAlert = useRef("")
     const navigate = useNavigate();
 
-    const checkConfirm = async () =>{
-        const token = codigo.current.value
-        const response = await actions.confReg(token)
-        console.log(response);
+    const location = useLocation();
+
+	const formik = useFormik({
+		initialValues: {token: ''},
+		validationSchema: Yup.object({
+			token: Yup.string().required('Este campo es requerido'),
+		}),
+		onSubmit: (values) => {
+		  checkConfirm(values.token)
+		},
+	  });
+
+    const checkConfirm = async (values) =>{
+        const response = await actions.confReg(values)
         if (response.status == 200) {
             setTimeout(() => {mostrarAlert.current.classList.add('d-none'), mostrarAlert.current.classList.remove('alert-success'), navigate("/login")}, 3000);
             mostrarAlert.current.classList.remove('d-none');
@@ -26,17 +38,26 @@ export const ConfReg = () => {
         }
     }
 
+    useLayoutEffect(() => {
+		document.title = store.siteName+" - Confirmar registro"
+	}, [location]);
+
 	return (
 		<>
 			<div className="text-dark p-5 text-center text-sm-start">
             <div className="container text-center" style={{width: "30rem"}}>
-                <form className="bg-white p-3">
-                    <img className="mb-4" src="https://getbootstrap.com/docs/5.1/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57" />
+                <form className="bg-white p-3" onSubmit={formik.handleSubmit}>
+                    <img className="mb-4" src={logo} alt="Logo Fromtony"/>
                     <h1 className="h3 mb-3 fw-normal">Confirmar Cuenta</h1>
                     <div className="form-floating d-flex">
-                        <input id="rc-codigo" ref={codigo} name="codigo" className="form-control" type="text" placeholder="Pega aquí tu código" />
-                        <label htmlFor="rc-codigo">Código</label>
-                        <button type="button" className="btn btn-primary" onClick={() => checkConfirm()}>Enviar</button>
+                        <input id="rc-token" name="token" value={formik.values.token} className={formik.touched.token && formik.errors.token ? "form-control border border-danger bg-danger bg-opacity-25" : "form-control"} type="text" placeholder="Tu usuario" onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                            {formik.touched.token && formik.errors.token ? (
+                            <div className="text-danger">
+                                {formik.errors.token}
+                            </div>
+                            ) : null}
+                        <label htmlFor="rc-token">Código</label>
+                        <button type="submit" className="btn btn-primary mx-1">Enviar</button>
                     </div>
                     <div className={"alert d-none"} ref={mostrarAlert} role="alert">{confRegMsg}</div>
                 </form>

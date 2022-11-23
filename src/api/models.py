@@ -9,9 +9,10 @@ class Usuarios(db.Model):
     apellido = db.Column(db.String(250), unique=False, nullable=False)
     clave = db.Column(db.String(250), unique=False, nullable=False)
     correo = db.Column(db.String(250), unique=False, nullable=False)
+    celular = db.Column(db.Integer, nullable=False)
     departamento = db.Column(db.String(250), unique=False, nullable=False)
     ciudad = db.Column(db.String(250), unique=False, nullable=False)
-    fecha_nacimiento = db.Column(db.Integer, unique=False, nullable=False)
+    fecha_nacimiento = db.Column(db.String(8), unique=False, nullable=False)
     genero = db.Column(db.String(250), unique=False, nullable=False)
     sobre_mi = db.Column(db.String(250), unique=False, nullable=True)
     preferencias = db.Column(db.String(250), unique=False, nullable=True)
@@ -35,6 +36,7 @@ class Usuarios(db.Model):
             "nombre": self.nombre,
             "apellido": self.apellido,
             "correo": self.correo,
+            "celular": self.celular,
             "departamento": self.departamento,
             "ciudad": self.ciudad,
             "fecha_nacimiento": self.fecha_nacimiento,
@@ -47,10 +49,13 @@ class Usuarios(db.Model):
         }
     def serializeViaje(self):
         return {
+            "id": self.id,
             "nombre": self.nombre,
             "apellido": self.apellido,
             "url_avatar": self.url_avatar,
             "preferencias": self.preferencias,
+            "correo": self.correo,
+            "celular": self.celular,
         }
 
 class Vehiculos(db.Model):
@@ -59,7 +64,7 @@ class Vehiculos(db.Model):
     nombre = db.Column(db.String(250), nullable=False)
     modelo = db.Column(db.String(250), nullable=False)
     kms_por_litro = db.Column(db.Integer, nullable=False)
-    cantidad_asientos = db.Column(db.Integer, nullable=False)
+    cantidad_asientos = db.Column(db.String(20), nullable=False)
     activo = db.Column(db.Boolean(), unique=False, nullable=False)
     viajes = db.relationship('Viajes', backref='vehiculos', lazy=True)
 
@@ -77,6 +82,8 @@ class Vehiculos(db.Model):
             "activo": self.activo
             # do not serialize the password, its a security breach
         }
+    def serializeModelo(self):
+        return self.modelo
 
 class Viajes(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -85,10 +92,10 @@ class Viajes(db.Model):
     vehiculo = db.Column(db.Integer, db.ForeignKey('vehiculos.id'))
     desde = db.Column(db.String(250), nullable=False)
     hasta = db.Column(db.String(250), nullable=False)
-    fecha = db.Column(db.Integer, nullable=False)
-    hora = db.Column(db.Integer, nullable=False)
-    asientos_disponibles = db.Column(db.Integer, nullable=False)
-    costo_asiento_uy = db.Column(db.Integer, nullable=False)
+    fecha = db.Column(db.String(8), nullable=False)
+    hora = db.Column(db.String(4), nullable=False)
+    asientos_disponibles = db.Column(db.String(20), nullable=False)
+    costo_asiento_uy = db.Column(db.String(20), nullable=False)
     activo = db.Column(db.Boolean(), nullable=False)
     acompanantes = db.relationship('Acompanantes', backref='viajes', lazy=True)
 
@@ -98,11 +105,13 @@ class Viajes(db.Model):
     def serialize(self):
         conductor = Usuarios.query.filter_by(id=self.conductor).first()
         conductor = conductor.serializeViaje()
+        vehiculo = Vehiculos.query.filter_by(id=self.vehiculo).first()
+        vehiculo = vehiculo.serializeModelo()
         return {
             "id": self.id,
             "acerca": self.acerca,
             "conductor": conductor,
-            "vehiculo": self.vehiculo,
+            "vehiculo": vehiculo,
             "desde": self.desde,
             "hasta": self.hasta,
             "fecha": self.fecha,
@@ -112,27 +121,46 @@ class Viajes(db.Model):
             "activo": self.activo,
             # do not serialize the password, its a security breach
         }
+    def serializeAcompanante(self):
+        conductor = Usuarios.query.filter_by(id=self.conductor).first()
+        conductor = conductor.serializeViaje()
+        vehiculo = Vehiculos.query.filter_by(id=self.vehiculo).first()
+        vehiculo = vehiculo.serializeModelo()
+        return {
+            "id": self.id,
+            "conductor": conductor,
+            "desde": self.desde,
+            "hasta": self.hasta,
+            "fecha": self.fecha,
+            "hora": self.hora,
+            "vehiculo": vehiculo,
+        }
 
 class Acompanantes(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     id_usuario = db.Column(db.Integer, db.ForeignKey('usuarios.id'))
     id_viaje = db.Column(db.Integer, db.ForeignKey('viajes.id'))
+    cantidad_asientos = db.Column(db.String(10), nullable=False)
     activo = db.Column(db.Boolean(), nullable=False)
-    estado = db.Column(db.String(10), nullable=False)
+    estado = db.Column(db.String(20), nullable=False)
+    visto = db.Column(db.Boolean(), nullable=False)
     
 
     def __repr__(self):
         return f'<Acompanantes {self.id}>'
 
     def serialize(self):
+        usuario = Usuarios.query.filter_by(id=self.id_usuario).first()
+        usuario = usuario.serializeViaje()
+        viaje = Viajes.query.filter_by(id=self.id_viaje).first()
+        viaje = viaje.serializeAcompanante()
         return {
             "id": self.id,
-            "id_usuario": self.id_usuario,
-            "id_viaje": self.id_viaje,
-            "estado": self.id_viaje,
+            "usuario": usuario,
+            "viaje": viaje,
+            "cantidad_asientos": self.cantidad_asientos,
+            "estado": self.estado,
+            "visto": self.visto,
             "activo": self.activo
             # do not serialize the password, its a security breach
         }
-    def serializeViajes(self):
-        viaje = Viajes.query.filter_by(id=self.id_viaje).first()
-        return viaje.serialize()

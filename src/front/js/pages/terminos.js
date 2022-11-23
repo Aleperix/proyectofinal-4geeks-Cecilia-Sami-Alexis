@@ -1,9 +1,13 @@
-import React, { useContext } from "react";
-import { ContacForm } from "../component/contactform";
-import { Context } from "../store/appContext";
+import React, {useContext, useLayoutEffect} from "react";
+import { useLocation } from "react-router-dom";
+import {Context} from "../store/appContext";
 export const Terminos = () => {
     const { store, actions } = useContext(Context);
+    const location = useLocation();
 
+	useLayoutEffect(() => {
+		document.title = store.siteName+" - Condiciones Generales de Uso"
+	}, [location]);
 
 
     return (

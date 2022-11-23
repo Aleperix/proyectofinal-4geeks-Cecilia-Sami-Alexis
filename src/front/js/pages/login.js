@@ -1,5 +1,6 @@
 import React, {useContext, useState, useRef} from "react";
 import { useNavigate } from "react-router-dom";
+import { useFormik } from 'formik';
 import { Context } from "../store/appContext";
 import logo from "../../img/logo3.png"
 
@@ -8,14 +9,30 @@ export const Login = () => {
   const departamentos = require('../data/departamentos.json');
   const [depIndex] = useState(Math.floor(Math.random() * departamentos.length))
   
-  const [usuario, setUsuario] = useState("");
-  const [clave, setClave] = useState("");
+  // const [usuario, setUsuario] = useState("");
+  // const [clave, setClave] = useState("");
 	const [loginError, setLoginError] = useState("");
   const navigate = useNavigate();
   const mostrarAlert = useRef("")
 
-  const handleSubmit = async ()=>{
-    let onLogged = await actions.login({"nombre_usuario":usuario, "clave":clave});
+  const formik = useFormik({
+		initialValues: {usuario: '', contraseña: ''},
+		validationSchema: Yup.object({
+			usuario: Yup.string().min(2, 'Tu usuario debe contener 2 caracteres o más').required('El nombre es requerido'),
+			contraseña: Yup.string().min(6, 'Tu contraseña debe contener 6 caracteres o más').required('Este campo es requerido'),
+      
+		}),
+		onSubmit: (values, { resetForm }) => {
+		  console.log(values);
+		  handleSubmit(values)
+      resetForm();
+		},
+	  });
+
+
+
+  const handleSubmit = async (formik)=>{
+    let onLogged = await actions.login({"nombre_usuario":formik.values.usuario, "clave":formik.values.contraseña});
     if (usuario == "" || clave == ""){
         setTimeout(() => {mostrarAlert.current.classList.add('d-none')}, 3000);
         mostrarAlert.current.classList.remove('d-none');
@@ -36,16 +53,16 @@ export const Login = () => {
 		<div className="contenedor d-flex align-items-center vh-100" style={{backgroundImage: 'url("'+departamentos[depIndex].img+'")', backgroundSize: 'cover'}}>
       <div className="container text-center" style={{width: "25rem"}}>
         {!store.auth ?
-        <form className="bg-white p-3">
+        <form className="bg-white p-3" onSubmit={formik.handleSubmit}>
           <img className="mb-4" src={logo} alt="" />
           <h1 className="h3 mb-3 fw-normal">Iniciar sesión</h1>
           <div className="alert alert-danger d-none" ref={mostrarAlert} role="alert">{loginError}</div>
           <div className="form-floating">
-            <input value={usuario} type="email" className="form-control" id="l-usuario" placeholder="miusuario" onChange={(e) => setUsuario(e.target.value)}/>
+            <input value={formik.values.usuario} type="email" className="form-control" id="l-usuario" placeholder="miusuario"  onChange={formik.handleChange} onBlur={formik.handleBlur}/>
             <label htmlFor="l-usuario">Usuario</label>
           </div>
           <div className="form-floating pt-1">
-            <input value={clave} type="password" className="form-control" id="l-contraseña" placeholder="micontraseña" onChange={(e) => setClave(e.target.value)}/>
+            <input value={formik.values.contraseña} type="password" className="form-control" id="l-contraseña" placeholder="micontraseña" onChange={formik.handleChange} onBlur={formik.handleBlur}/>
             <label htmlFor="l-contraseña">Contraseña</label>
           </div>
           <div className="mb-3 mt-1 d-flex justify-content-between">

@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 30cebfd5cdc0
+Revision ID: 84b892d54d1b
 Revises: 
-Create Date: 2022-11-17 18:27:06.997172
+Create Date: 2022-11-22 19:36:01.316876
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '30cebfd5cdc0'
+revision = '84b892d54d1b'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -25,9 +25,10 @@ def upgrade():
     sa.Column('apellido', sa.String(length=250), nullable=False),
     sa.Column('clave', sa.String(length=250), nullable=False),
     sa.Column('correo', sa.String(length=250), nullable=False),
+    sa.Column('celular', sa.Integer(), nullable=False),
     sa.Column('departamento', sa.String(length=250), nullable=False),
     sa.Column('ciudad', sa.String(length=250), nullable=False),
-    sa.Column('fecha_nacimiento', sa.Integer(), nullable=False),
+    sa.Column('fecha_nacimiento', sa.String(length=8), nullable=False),
     sa.Column('genero', sa.String(length=250), nullable=False),
     sa.Column('sobre_mi', sa.String(length=250), nullable=True),
     sa.Column('preferencias', sa.String(length=250), nullable=True),
@@ -43,7 +44,7 @@ def upgrade():
     sa.Column('nombre', sa.String(length=250), nullable=False),
     sa.Column('modelo', sa.String(length=250), nullable=False),
     sa.Column('kms_por_litro', sa.Integer(), nullable=False),
-    sa.Column('cantidad_asientos', sa.Integer(), nullable=False),
+    sa.Column('cantidad_asientos', sa.String(length=20), nullable=False),
     sa.Column('activo', sa.Boolean(), nullable=False),
     sa.ForeignKeyConstraint(['id_usuario'], ['usuarios.id'], ),
     sa.PrimaryKeyConstraint('id')
@@ -55,10 +56,10 @@ def upgrade():
     sa.Column('vehiculo', sa.Integer(), nullable=True),
     sa.Column('desde', sa.String(length=250), nullable=False),
     sa.Column('hasta', sa.String(length=250), nullable=False),
-    sa.Column('fecha', sa.Integer(), nullable=False),
-    sa.Column('hora', sa.Integer(), nullable=False),
-    sa.Column('asientos_disponibles', sa.Integer(), nullable=False),
-    sa.Column('costo_asiento_uy', sa.Integer(), nullable=False),
+    sa.Column('fecha', sa.String(length=8), nullable=False),
+    sa.Column('hora', sa.String(length=4), nullable=False),
+    sa.Column('asientos_disponibles', sa.String(length=20), nullable=False),
+    sa.Column('costo_asiento_uy', sa.String(length=20), nullable=False),
     sa.Column('activo', sa.Boolean(), nullable=False),
     sa.ForeignKeyConstraint(['conductor'], ['usuarios.id'], ),
     sa.ForeignKeyConstraint(['vehiculo'], ['vehiculos.id'], ),
@@ -68,8 +69,10 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('id_usuario', sa.Integer(), nullable=True),
     sa.Column('id_viaje', sa.Integer(), nullable=True),
+    sa.Column('cantidad_asientos', sa.String(length=10), nullable=False),
     sa.Column('activo', sa.Boolean(), nullable=False),
-    sa.Column('estado', sa.String(length=10), nullable=False),
+    sa.Column('estado', sa.String(length=20), nullable=False),
+    sa.Column('visto', sa.Boolean(), nullable=False),
     sa.ForeignKeyConstraint(['id_usuario'], ['usuarios.id'], ),
     sa.ForeignKeyConstraint(['id_viaje'], ['viajes.id'], ),
     sa.PrimaryKeyConstraint('id')

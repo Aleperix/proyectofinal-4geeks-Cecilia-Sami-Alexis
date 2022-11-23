@@ -11,6 +11,7 @@ from flask_jwt_extended import create_access_token, create_refresh_token, get_jw
 from flask_mail import Message
 from api.token import generate_confirmation_token, confirm_token
 import random, string
+from sqlalchemy import and_, or_, not_
 
 api = Blueprint('api', __name__)
 
@@ -31,10 +32,10 @@ def login():
     clave = request.json.get("clave", None)
     usuario = Usuarios.query.filter_by(nombre_usuario=nombre_usuario).first()
 
-    decrypted_pass = current_app.bcrypt.check_password_hash(usuario.clave, clave)
-
     if usuario is None:
         raise APIException('El usuario ingresado no existe', status_code=404)
+
+    decrypted_pass = current_app.bcrypt.check_password_hash(usuario.clave, clave)
 
     if nombre_usuario != usuario.nombre_usuario or decrypted_pass == False:
         raise APIException('Usuario o contraseña incorrectos', status_code=401)
@@ -88,7 +89,7 @@ def profile(id_usuario):
     if len(viajes_acompanante) == 0:
         viajes_acompanante = {"message": 'Aún no has hecho viajes como acompañante'}
     else:
-        viajes_acompanante = list(map(lambda item: {**item.serializeViajes(), **item.serialize()}, viajes_acompanante))
+        viajes_acompanante = list(map(lambda item: {**item.serialize(), **item.serialize()}, viajes_acompanante))
 
     response_body = {
         "perfil": usuario.serialize(),
@@ -126,6 +127,7 @@ def add_new_user():
         nombre=body["nombre"],
         apellido=body["apellido"],
         clave=pw_hash,
+        celular=body["celular"],
         correo=body["correo"],
         departamento=body["departamento"],
         ciudad=body["ciudad"],
@@ -244,16 +246,18 @@ def add_new_travel():
         vehiculo=body["vehiculo"],
         desde=body["desde"],
         hasta=body["hasta"],
-        fecha=body["fecha"],
-        hora=body["hora"],
+        fecha=body["fecha"].replace("-", ""),
+        hora=body["hora"].replace(":", ""),
         asientos_disponibles=body["asientos_disponibles"],
         costo_asiento_uy=body["costo_asiento_uy"],
         activo=1)
 
     db.session.add(new_travel)
     db.session.commit()
+    db.session.refresh(new_travel)
     response_body = {
         "message": "Viaje agregado con éxito",
+        "id": new_travel.id,
         "status": 200
     }
     return jsonify(response_body), 200
@@ -311,7 +315,7 @@ def place(travel_id):
             ##### Fin Viajes #####
 
             ##### Inicio Vehículos #####
-#Modificamos un usuario dependiendo de su ID
+#Modificamos un vehiculo dependiendo de su ID
 @api.route('/vehicles/new', methods=['POST'])
 @jwt_required()
 def add_new_vehicle():
@@ -321,12 +325,13 @@ def add_new_vehicle():
         if body[i] == None:
             raise APIException('Hay campos vacíos', status_code=204)
     
-    new_vehicle = Viajes(
+    new_vehicle = Vehiculos(
         id_usuario=body["id_usuario"],
         nombre=body["nombre"],
         modelo=body["modelo"],
         kms_por_litro=body["kms_por_litro"],
-        cantidad_asientos=body["cantidad_asientos"])
+        cantidad_asientos=body["cantidad_asientos"],
+        activo=1)
 
     db.session.add(new_vehicle)
     db.session.commit()
@@ -336,7 +341,8 @@ def add_new_vehicle():
     }
     return jsonify(response_body), 200
 
-@api.route("/vehicles/<int:acompanante_id>", methods=["PUT"])
+#Modificamos un vehículo dependiendo de su ID
+@api.route("/vehicles/<int:vehicle_id>", methods=["PUT"])
 @jwt_required()
 def modify_vehicle(vehicle_id):
     vehicle = Vehiculos.query.filter_by(id=vehicle_id).first()
@@ -360,7 +366,21 @@ def modify_vehicle(vehicle_id):
            ##### Fin Vehículos #####
 
             ##### Inicio Acompañantes #####
-#Modificamos un usuario dependiendo de su ID
+#Obtenemos un acompañante dependiendo de su id
+@api.route('/acompanante/t/<int:travel_id>/u/<int:user_id>', methods=['GET'])
+def get_one_acompanante(travel_id, user_id):
+    acompanante = Acompanantes.query.filter(Acompanantes.id_viaje==travel_id, Acompanantes.id_usuario==user_id).first()
+
+    if acompanante is None:
+        raise APIException('El acompañante que buscas no existe', status_code=404)
+
+    response_body = {
+        "acompanante": acompanante.serialize(),
+        "status": 200
+    }
+    return jsonify(response_body), 200
+
+#Agregamos un acompañante
 @api.route('/acompanantes/new', methods=['POST'])
 @jwt_required()
 def add_new_acompanante():
@@ -370,9 +390,12 @@ def add_new_acompanante():
         if body[i] == None:
             raise APIException('Hay campos vacíos', status_code=204)
     
-    new_acompanante = Viajes(
+    new_acompanante = Acompanantes(
         id_usuario=body["id_usuario"],
         id_viaje=body["id_viaje"],
+        cantidad_asientos=body["cantidad_asientos"],
+        activo=1,
+        visto=0,
         estado=body["estado"])
 
     db.session.add(new_acompanante)
@@ -383,6 +406,7 @@ def add_new_acompanante():
     }
     return jsonify(response_body), 200
 
+#Modificamos un acompañante dependiendo de su ID
 @api.route("/acompanantes/<int:acompanante_id>", methods=["PUT"])
 @jwt_required()
 def modify_acompanante(acompanante_id):
@@ -404,4 +428,28 @@ def modify_acompanante(acompanante_id):
         "status": 200
     }
     return jsonify(response_body), 200
+
+#Obtenemos el estado de mis solicitudes de viajes
+@api.route('/viajesreq/u/<int:user_id>', methods=['GET'])
+def get_all_user_req(user_id):
+    acompanantes = Acompanantes.query.filter(Acompanantes.id_usuario==user_id, not_(or_(Acompanantes.estado.like("pendiente"), Acompanantes.visto == True))).all()
+    print(acompanantes)
+    if len(acompanantes) == 0:
+        raise APIException('Sin cambios en tus solicitudes de viajes', status_code=404)
+
+    results = list(map(lambda item: item.serialize(), acompanantes)) #esto serializa los datos del arrays users
+    print(results)
+    return jsonify(results), 200
+
+#Obtenemos las solicitudes de mis propios viajes
+@api.route('/viajesreq/t/<int:user_id>', methods=['GET'])
+def get_all_travel_req(user_id):
+    acompanantes = Acompanantes.query.filter(user_id==Viajes.conductor, Acompanantes.estado.like("pendiente")).all()
+
+    if len(acompanantes) == 0:
+        raise APIException('Aún no tienes solicitudes de usuarios', status_code=404)
+
+    results = list(map(lambda item: item.serialize(), acompanantes)) #esto serializa los datos del arrays users
+
+    return jsonify(results), 200
            ##### Fin Acompañantes #####

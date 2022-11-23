@@ -7,6 +7,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 			usuario: {},
 			auth: false,
 			viajes: [],
+			viajesReq: [],
+			userReq: [],
 		},
 		actions: {
 							//	Inicio API //
@@ -106,9 +108,19 @@ const getState = ({ getStore, getActions, setStore }) => {
 			register: async (value) => {
 				const action = getActions();
 				let response = await action.postData(process.env.BACKEND_URL + "/api/register", value);
-				console.log(response);
 				if (!response.hasOwnProperty("code")) {
 					return true;
+				} else {
+					console.log(response);
+					response = response.response;
+					return {message: response.data.message}
+				}
+			},
+			modifyUser: async (id, value) => {
+				const action = getActions();
+				let response = await action.putData(process.env.BACKEND_URL + "/api/users/"+id, value, { Authorization: "Bearer " + localStorage.getItem("token") });
+				if (!response.hasOwnProperty("code")) {
+					return response.data;
 				} else {
 					console.log(response);
 					response = response.response;
@@ -157,7 +169,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				let response = await action.postData(process.env.BACKEND_URL + "/api/viajes/new", value, { Authorization: "Bearer " + localStorage.getItem("token") });
 				if (!response.hasOwnProperty("code")) {
 					action.getAllTravels()
-					return true;
+					return response.data;
 				} else {
 					response = response.response;
 					console.log(response);
@@ -188,9 +200,74 @@ const getState = ({ getStore, getActions, setStore }) => {
 			//Fin Viajes
 
 			//Inicio Acompanantes
+			getOneAcompanante: async (travel, user,) => {
+				const action = getActions();
+				const response = await action.getData(process.env.BACKEND_URL + "/api/acompanante/t/"+travel+"/u/"+user);
+				console.log(response);
+				if (!response.hasOwnProperty("code")) {
+					return response.data;
+				}
+				return response.response;
+			},
+			postAcompanante: async (value) => {
+				console.log(value);
+				const action = getActions();
+				let response = await action.postData(process.env.BACKEND_URL + "/api/acompanantes/new", value, { Authorization: "Bearer " + localStorage.getItem("token") });
+				if (!response.hasOwnProperty("code")) {
+					return response.data;
+				} else {
+					response = response.response;
+					console.log(response);
+					return {message: response.data.message}
+				}
+			},
+			getAllReq: async (id, type) => {
+				const action = getActions();
+				let response
+				if (type == "user"){
+					response = await action.getData(process.env.BACKEND_URL + "/api/viajesreq/u/"+id);
+				}else if(type == "travel"){
+					response = await action.getData(process.env.BACKEND_URL + "/api/viajesreq/t/"+id);
+				}
+					if (type == "user") {
+						if (!response.hasOwnProperty("code")) {
+							setStore({ userReq: response.data });
+							return response.data;
+						}
+						setStore({ userReq: [] });
+						return response.response;
+					}else if (type == "travel") {
+						if (!response.hasOwnProperty("code")) {
+							setStore({ viajesReq: response.data });
+							return response.data;
+						}
+						setStore({ viajesReq: [] });
+						return response.response;
+					}
+			},
+			modifyAcompanante: async (id,data) => {
+				const action = getActions();
+				const response = await action.putData(process.env.BACKEND_URL + "/api/acompanantes/"+ id, data, { Authorization: "Bearer " + localStorage.getItem("token") });
+				if (!response.hasOwnProperty("code")) {
+					return response.data;
+				}
+				return response.response;
+			},
 			//Fin Acompanantes
 
 			//Inicio Vehiculos
+			postVehicle: async (value) => {
+				console.log(value);
+				const action = getActions();
+				let response = await action.postData(process.env.BACKEND_URL + "/api/vehicles/new", value, { Authorization: "Bearer " + localStorage.getItem("token") });
+				if (!response.hasOwnProperty("code")) {
+					return response.data;
+				} else {
+					response = response.response;
+					console.log(response);
+					return {message: response.data.message}
+				}
+			},
 			//Fin Vehiculos
 
 							//	Fin API //

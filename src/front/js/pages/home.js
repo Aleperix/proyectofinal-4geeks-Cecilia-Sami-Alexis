@@ -1,10 +1,17 @@
-import React, { useContext } from "react";
+import React, { useContext, useLayoutEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { Context } from "../store/appContext";
 import { Viajes } from "../component/viajes";
 
 
 export const Home = () => {
 	const { store, actions } = useContext(Context);
+	
+	const location = useLocation();
+
+	useLayoutEffect(() => {
+		document.title = store.siteName+" - Hasta el infinito y más allá"
+	}, [location]);
 
 	return (
 		<>

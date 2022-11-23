@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useContext, useRef } from "react";
-import { Link, useParams } from "react-router-dom";
+import React, { useState, useEffect, useLayoutEffect, useContext, useRef } from "react";
+import { Link, useParams, useLocation } from "react-router-dom";
 import { ErrorPage } from "../component/errorpage";
 import defaultAvatarUrl from "../../img/defaultAvatar.png"
 import { Context } from "../store/appContext";
@@ -16,13 +16,20 @@ export const Perfil = () => {
 	const remoteAvatarTab = useRef();
 	const localAvatarTab = useRef();
 	const [localTab, setlocalTab] = useState();
+
+	const responseMessage = useRef()
+	const [responseValue, setResponseValue] = useState();
+
+	const location = useLocation();
 	
 	const getProfileData = async (id) => {
 		const response = await actions.getProfile(id)
+		console.log(response);
 		if (response.status == 200){
 			const edad = getAge(String(response.perfil.fecha_nacimiento))
 			setDatosPerfil({perfil: response.perfil, status: response.status})
 			setViajesConductor(response.viajes.conductor)
+			console.log(response.viajes.acompanante);
 			setViajesAcompanante(response.viajes.acompanante)
 			setEdad(edad)
 			return null
@@ -34,7 +41,7 @@ export const Perfil = () => {
 	
 	function getAge(fechaNac) {
 		let hoy = new Date();
-		let miFecha = fechaNac.substring(0, 4)+"-"+fechaNac.substring(4, 6)+"-"+fechaNac.substring(6, 8)
+		let miFecha = String(fechaNac).substring(6, 8) + "/" + String(fechaNac).substring(4, 6) + "/" + String(fechaNac).substring(0, 4)
 		let fechaNacUsr = new Date(miFecha);
 		let edad = hoy.getFullYear() - fechaNacUsr.getFullYear();
 		let m = hoy.getMonth() - fechaNacUsr.getMonth();
@@ -65,12 +72,32 @@ export const Perfil = () => {
 		} 
 		let response = await actions.postData('https://api.imgur.com/3/image',data , {Authorization: 'Client-ID de65600da46b2c7'})
 		response = response.data
+		let imgType = response.data.type.split('/')
+		let chgPP = await actions.modifyUser(profileid.id, {url_avatar: "https://i.imgur.com/"+response.data.id+"."+imgType[1]})
+		if(chgPP.status == 200){
+			setTimeout(() => {
+				responseMessage.current.classList.remove("bg-success", "show", "animate__fadeInLeft");
+			}, 3000);
+			responseMessage.current.classList.add("bg-success", "show", "animate__fadeInLeft");
+			setResponseValue(chgPP.message)
+			actions.isAuth()
+		}else{
+			setTimeout(() => {
+				responseMessage.current.classList.remove("bg-danger", "show", "animate__fadeInLeft");
+			}, 3000);
+			responseMessage.current.classList.add("bg-danger", "show", "animate__fadeInLeft");
+			setResponseValue(chgPP.message)
+		}
 		console.log(response.data.link);
 	}
 
 	useEffect(() => {
 		getProfileData(profileid.id)
 	}, []);
+
+	useLayoutEffect(() => {
+		document.title = store.siteName+" - Perfil de "+store.usuario.nombre_usuario
+	}, [location]);
 	return (
 		<>
 		{store.auth ?
@@ -96,7 +123,7 @@ export const Perfil = () => {
 					:
 					<div className="mx-4 py-2 bg-secondary bg-opacity-25 border-start border-end border-secondary h-100" id="my-profile-config">
 						<div className="my-4 d-flex justify-content-center">
-							<button className="btn btn-secondary d-block m-2">Contactar</button>
+							<button className="btn btn-secondary d-block m-2">Los datos de contacto del usuario son privados</button>
 						</div>
 					</div>}
 				</div>
@@ -112,8 +139,12 @@ export const Perfil = () => {
 									<span className="d-block m-2 text-break"><b>Usuario: </b>{datosPerfil.perfil?.nombre_usuario}</span>
 									<span className="d-block m-2 text-break"><b>Nombre: </b>{datosPerfil.perfil?.nombre}</span>
 									<span className="d-block m-2 text-break"><b>Apellido: </b>{datosPerfil.perfil?.apellido}</span>
-									<span className="d-block m-2 text-break"><b>Correo Electrónico: </b>{datosPerfil.perfil?.correo}</span>
-									<span className="d-block m-2 text-break"><b>Ciudad: </b>{datosPerfil.perfil?.ciudad}</span>
+									{store.usuario.id == datosPerfil.perfil?.id &&
+										<>
+											<span className="d-block m-2 text-break"><b>Correo Electrónico: </b>{datosPerfil.perfil?.correo}</span>
+											<span className="d-block m-2 text-break"><b>Ciudad: </b>{datosPerfil.perfil?.ciudad}</span>
+										</>
+									}
 								</div>
 								<div className="col-xs-6 col-sm-6 col-md-6 col-lg-4 col-xl-4">
 									<span className="d-block m-2 text-break"><b>Edad: </b>{edad}</span>
@@ -152,14 +183,15 @@ export const Perfil = () => {
 										</tr>
 									</thead>
 									<tbody>
-									{viajesConductor.map((element, index) => {
+									{viajesConductor?.map((element, index) => {
 											return(
 											<tr key={index+1}>
 											<th scope="row">{index+1}</th>
-											<td>{element.desde}</td>
-											<td>{element.hasta}</td>
-											<td>{element.fecha}</td>
-											<td>{element.hora}</td>
+											<td>{element?.desde}</td>
+											<td>{element?.hasta}</td>
+											<td>{String(element?.fecha).substring(6, 8) + "/" + String(element?.fecha).substring(4, 6) + "/" + String(element?.fecha).substring(0, 4)}</td>
+											<td>{String(element?.hora).substring(0, 2) + ":" + String(element?.hora).substring(2, 4)}</td>
+											<td>{element?.vehiculo}</td>
 											<td></td>
 											</tr>
 									)})}
@@ -184,21 +216,21 @@ export const Perfil = () => {
 										<th scope="col-1">Hasta</th>
 										<th scope="col-1">Fecha</th>
 										<th scope="col-1">Hora</th>
-										{/* <th scope="col-1">Vehículo</th> */}
 										<th scope="col-1">Conductor</th>
+										<th scope="col-1">Vehículo</th>
 										</tr>
 									</thead>
 									<tbody>
-									{viajesAcompanante.map((element, index) => {
+									{viajesAcompanante?.map((element, index) => {
 											return(
 											<tr key={index+1}>
 											<th scope="row">{index+1}</th>
-											<td>{element.desde}</td>
-											<td>{element.hasta}</td>
-											<td>{element.fecha}</td>
-											<td>{element.hora}</td>
-											{/* <td>{vehiculos[index].modelo}</td> */}
-											<td>{element.conductor}</td>
+											<td>{element?.viaje?.desde}</td>
+											<td>{element?.viaje?.hasta}</td>
+											<td>{String(element?.viaje?.fecha).substring(6, 8) + "/" + String(element?.viaje?.fecha).substring(4, 6) + "/" + String(element?.viaje?.fecha).substring(0, 4)}</td>
+											<td>{String(element?.viaje?.hora).substring(0, 2) + ":" + String(element?.viaje?.hora).substring(2, 4)}</td>
+											<td>{element?.viaje?.conductor?.nombre+" "+element?.viaje?.conductor?.apellido}</td>
+											<td>{element?.viaje?.vehiculo}</td>
 											</tr>
 									)})}
 									</tbody>
@@ -233,13 +265,13 @@ export const Perfil = () => {
 											</tr>
 										</thead>
 										<tbody>
-										{datosPerfil.perfil?.vehiculos?.map((element, index) => {
+										{datosPerfil?.perfil?.vehiculos?.map((element, index) => {
 											return(
 											<tr key={index+1}>
 											<th scope="row">{index+1}</th>
-											<td>{element.modelo}</td>
-											<td>{element.kms_por_litro}</td>
-											<td>{element.cantidad_asientos}</td>
+											<td>{element?.modelo}</td>
+											<td>{element?.kms_por_litro}</td>
+											<td>{element?.cantidad_asientos}</td>
 											</tr>
 										)})}
 										</tbody>
@@ -282,10 +314,18 @@ export const Perfil = () => {
 										}
 									</div>
 								</div>
+								<span className="text-muted text-center">Se recomienda una imagen cuadrada de por lo menos 200px</span>
 								<div className="modal-footer">
 									<button type="button" className="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
 									<button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={!localTab ? () => onUploadConfirm('url') : () => onUploadConfirm('file')}>Confirmar</button>
 								</div>
+							</div>
+						</div>
+					</div>
+					<div className="toast align-items-center text-white border-0 top-0 left-0 position-fixed" style={{zIndex: "100"}}ref={responseMessage} role="alert" aria-live="assertive" aria-atomic="true">
+						<div className="d-flex">
+							<div className="toast-body">
+							{responseValue}
 							</div>
 						</div>
 					</div>

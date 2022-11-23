@@ -1,5 +1,5 @@
-import React, {useContext, useState, useRef} from "react";
-import { useNavigate } from "react-router-dom";
+import React, {useContext, useLayoutEffect, useState, useRef} from "react";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { Context } from "../store/appContext";
 import logo from "../../img/logo3.png"
 
@@ -13,6 +13,8 @@ export const Login = () => {
 	const [loginError, setLoginError] = useState("");
   const navigate = useNavigate();
   const mostrarAlert = useRef("")
+
+  const location = useLocation();
 
   const handleSubmit = async ()=>{
     let onLogged = await actions.login({"nombre_usuario":usuario, "clave":clave});
@@ -31,6 +33,10 @@ export const Login = () => {
         setLoginError(onLogged?.message);
     }
   }
+
+  useLayoutEffect(() => {
+		document.title = store.siteName+" - Login"
+	}, [location]);
 
 	return (
 		<div className="contenedor d-flex align-items-center vh-100" style={{backgroundImage: 'url("'+departamentos[depIndex].img+'")', backgroundSize: 'cover'}}>
@@ -55,7 +61,7 @@ export const Login = () => {
             <a href="/forgot">Olvidé mi contraseña</a>
           </div>
           <button className="w-100 btn btn-lg btn-primary mb-2" onClick={() => handleSubmit()} type="button">Entrar</button>
-          <span>¿Aún no tienes cuenta? <a href="/register">Regístrate!</a></span>
+          <span>¿Aún no tienes cuenta? <Link to="/register">Regístrate!</Link></span>
         </form>
         :
         <div className="container text-danger bg-white p-3">Ya has iniciado sesión!</div>

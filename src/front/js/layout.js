@@ -15,16 +15,11 @@ import { CambioClave } from "./pages/cambioclave";
 import { Nosotros } from "./pages/nosotros";
 import { Preguntas } from "./pages/preguntas";
 import { Buscador } from "./pages/buscador";
-import { Politicas } from "./pages/politicas";
+import { Terminos } from "./pages/terminos";
 import injectContext from "./store/appContext";
-
-
 
 import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
-
-
-
 
 //create your first component
 const Layout = () => {
@@ -50,7 +45,8 @@ const Layout = () => {
                         <Route element={<CambioClave />} path="/changepass"/>
                         <Route element={<Nosotros />} path="/nosotros"/>
                         <Route element={<Viaje />} path="/viaje/:id" />
-                        <Route element={<Preguntas />} path="/preguntas"/>
+                        <Route element={<Preguntas />} path="/faq"/>
+                        <Route element={<Terminos />} path="/terminos" />
 						<Route element={<Buscador />} path="/search/:value"/>
                         <Route element={<h1>No encontrado!</h1>} />
                         

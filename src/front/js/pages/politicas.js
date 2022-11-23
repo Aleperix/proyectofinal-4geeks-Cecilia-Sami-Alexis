@@ -6,6 +6,7 @@ export const Politicas = () => {
 	const location = useLocation();
 
 	useLayoutEffect(() => {
+		window.scrollTo(0, 0)
 		document.title = store.siteName+" - Políticas de Privacidad"
 	}, [location]);
 

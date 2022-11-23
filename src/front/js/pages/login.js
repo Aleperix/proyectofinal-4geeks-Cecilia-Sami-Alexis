@@ -39,6 +39,7 @@ export const Login = () => {
   }
 
   useLayoutEffect(() => {
+    window.scrollTo(0, 0)
 		document.title = store.siteName+" - Login"
 	}, [location]);
 

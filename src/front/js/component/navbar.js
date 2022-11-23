@@ -56,8 +56,10 @@ export const Navbar = () => {
 						:
 					<ul className="navbar-nav ms-auto">
 						<li className="nav-item">
-							<span className="nav-link active text-secondary" aria-current="page" data-bs-toggle="modal" data-bs-target="#postTravel" role="button">Publicar un Viaje</span>
+							<span className="nav-link active text-secondary" aria-current="page" data-bs-toggle="modal" data-bs-target="#postTravel" role="button">Publicar Viaje</span>
 						</li>
+						<Notifications mobile={false}/>
+						<Notifications mobile={true}/>	
 						<li className="nav-item dropdown">
 							<a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 								<img className="border border-2 rounded-circle" src={store.usuario.url_avatar == null ? defaultAvatarUrl : store.usuario.url_avatar} width="30px" alt="Imagen de Perfil" />
@@ -68,8 +70,7 @@ export const Navbar = () => {
 								<li><button className="dropdown-item" data-bs-toggle="modal" data-bs-target="#confPerfil"><i className="fas fa-cog"></i> Configuración de cuenta</button></li>
 								<li role="button" data-bs-toggle="modal" data-bs-target="#logoutadvert"><span className="dropdown-item"><i className="fas fa-sign-out-alt"></i> Cerrar Sesión</span></li>
 							</ul>
-						</li>
-						<Notifications/>					
+						</li>				
 					</ul>
 					}
 				</div>

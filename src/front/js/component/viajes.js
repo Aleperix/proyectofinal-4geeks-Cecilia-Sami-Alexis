@@ -35,7 +35,7 @@ export const Viajes = () => {
 			</div>
 			{store.auth &&
 			<div className="position-sticky bottom-0 d-flex">
-				<button className="btn btn-primary me-md-2 ms-auto m-1" type="button" data-bs-toggle="modal" data-bs-target="#postTravel">
+				<button className="btn btn-primary me-md-2 ms-auto m-1 mt-4" type="button" data-bs-toggle="modal" data-bs-target="#postTravel">
 					Publicar Viaje
 				</button>
 			</div>

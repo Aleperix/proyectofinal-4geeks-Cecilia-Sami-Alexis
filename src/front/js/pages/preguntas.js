@@ -7,6 +7,7 @@ export const Preguntas = () => {
     const location = useLocation();
 
 	useLayoutEffect(() => {
+        window.scrollTo(0, 0)
 		document.title = store.siteName+" - Preguntas Frecuentes"
 	}, [location]);
 

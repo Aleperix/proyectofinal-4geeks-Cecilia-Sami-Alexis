@@ -1,12 +1,18 @@
-import React, { useContext } from "react";
-import { Context } from "../store/appContext";
+import React, {useContext, useLayoutEffect} from "react";
+import { useLocation } from "react-router-dom";
+import {Context} from "../store/appContext";
 export const Politicas = () => {
 	const { store, actions } = useContext(Context);
+	const location = useLocation();
+
+	useLayoutEffect(() => {
+		document.title = store.siteName+" - Políticas de Privacidad"
+	}, [location]);
 
 	return (
 		<div className="container mt-5 bg-light">
 			<div className="container">
-				<h2 className="text-center py-4">Política de Privacidad</h2>
+				<h2 className="text-center py-4">Políticas de Privacidad</h2>
 			</div>
             <div className="pt-4">
 			    <h5>1. Condiciones Generales de Uso</h5>

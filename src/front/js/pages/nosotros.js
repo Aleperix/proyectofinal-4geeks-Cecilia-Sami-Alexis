@@ -1,7 +1,17 @@
-import React from "react";
+import React, {useContext, useLayoutEffect} from "react";
+import { useLocation } from "react-router-dom";
+import {Context} from "../store/appContext";
 import logo from "../../img/logo.png"
 
 export const Nosotros = () => {
+
+  const {store}= useContext(Context)
+  const location = useLocation();
+
+  useLayoutEffect(() => {
+		document.title = store.siteName+" - Nosotros"
+	}, [location]);
+
   return (
     <div className="container ">
       <div className="container ">

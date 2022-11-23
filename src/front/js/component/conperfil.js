@@ -20,7 +20,7 @@ export const ConfPerfil = () => {
 			nombre_usuario: Yup.string().min(5, 'Tu nombre de usuario debe contener 5 caracteres o más').max(20, 'Tu nombre de usuario no debe contener más de 20 caracteres'),
 			clave: Yup.string().min(6, 'Tu contraseña debe contener 6 caracteres o más'),
 			correo: Yup.string().email('Correo electrónico inválido'),
-			celular: Yup.string().min(9, 'Tu celular debe contener 9 dígitos').max(9, 'Tu celular debe contener 9 dígitos'),
+			celular: Yup.string().min(8, 'Tu celular debe contener 8 dígitos').max(9, 'Tu celular debe contener 9 dígitos'),
 			departamento: Yup.string(),
 			ciudad: Yup.string().min(3, 'La ciudad debe contener 3 caracteres o más'),
 			genero: Yup.string(),
@@ -29,8 +29,13 @@ export const ConfPerfil = () => {
 		}),
 		onSubmit: values => {
 			values.celular = Number(values.celular)
-			values.preferencias = values.preferencias.join(",")
-			console.log(values.preferencias);
+			if(!values.preferencias.length < 1){values.preferencias = values.preferencias.join(",")}
+			Object.keys(values).forEach(key => {
+				if (values[key] == '' || values[key] == null) {
+						 delete values[key];
+				  }
+				});
+			console.log(values);
 			handleSubmit(values)
 		},
 	  });
@@ -39,19 +44,17 @@ export const ConfPerfil = () => {
 		const response = await actions.modifyUser(store.usuario.id, values)
 		console.log(response);
 		if (response.status == 200) {
-			setTimeout(() => {
-				responseMessage.current.classList.remove("bg-success", "show", "animate__fadeInLeft");
-			}, 3000);
-			responseMessage.current.classList.add("bg-success", "show", "animate__fadeInLeft");
-			setResponseValue(response.message)
-		} else {
-			setTimeout(() => {
-				mostrarAlert.current.classList.add("d-none");
-			}, 3000);
-			mostrarAlert.current.classList.remove("d-none");
-			setTravelError(response.message);
+            setTimeout(() => {mostrarAlert.current.classList.add('d-none'), mostrarAlert.current.classList.remove('alert-success')}, 3000);
+            mostrarAlert.current.classList.remove('d-none');
+            mostrarAlert.current.classList.add('alert-success');
+            setResponseValue(response.message);
 			mostrarAlert.current.scrollIntoView()
-		}
+        }else if(response.status == 404 || response.status == 403){
+            setTimeout(() => {mostrarAlert.current.classList.add('d-none'), mostrarAlert.current.classList.remove('alert-danger')}, 5000);
+            mostrarAlert.current.classList.remove('d-none');
+            mostrarAlert.current.classList.add('alert-danger')
+            setResponseValue(response.message);
+        }
 	}
 	
 
@@ -70,8 +73,8 @@ export const ConfPerfil = () => {
 							<div className="container">
 								<p className="text-muted text-center">Los campos no son requeridos y se pueden dejar vacíos para no cambiar sus datos</p>
 								<form className="column g-3" id="cp-form" onSubmit={formik.handleSubmit}>
-									<div className="alert alert-danger d-none" ref={mostrarAlert} role="alert">
-										{travelError}
+									<div className="alert d-none" ref={mostrarAlert} role="alert">
+										{responseValue}
 									</div>
 									<div className="form-floating mt-1">
 										<input id="cp-nombre_usuario" name="nombre_usuario" value={formik.values.nombre_usuario} className={formik.touched.nombre_usuario && formik.errors.nombre_usuario ? "form-control border border-danger bg-danger bg-opacity-25" : "form-control"} type="text" placeholder="Ej: Juantony55" onChange={formik.handleChange} onBlur={formik.handleBlur} />
@@ -177,6 +180,7 @@ export const ConfPerfil = () => {
 											<option value="mate">Mate</option>
 											<option value="no_fumar">No Fumar</option>
 											<option value="mascotas">Mascotas</option>
+											<option value="ninguna">Ninguna</option>
 										</select>
 										{formik.touched.preferencias && formik.errors.preferencias ? (
 											<div className="text-danger">

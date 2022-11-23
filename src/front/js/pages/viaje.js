@@ -140,8 +140,10 @@ export const Viaje = () => {
 											<span key={index}>
 												<i className="fas fa-paw"></i><span className="mx-2">Acepto mascotas pequeñas</span>
 											</span>
-										) : (
-											element
+										) : element == "ninguna" && (
+											<span key={index}>
+												Ninguna
+											</span>
 										);
 									})}
 							</div>

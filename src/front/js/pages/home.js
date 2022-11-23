@@ -1,5 +1,5 @@
 import React, { useContext, useLayoutEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import { Context } from "../store/appContext";
 import { Viajes } from "../component/viajes";
 
@@ -21,9 +21,9 @@ export const Home = () => {
 						<div className="mt-5 w-75">
 							<h1> Económico, ecológico y divertido. </h1>
 							<p className="lead text-secondary text-break"> Fromtony es una iniciativa creada con el objetivo de reducir el número de automóviles en la carretera, ayudando así a reducir las emisiones de Co2 y compartir los gastos de aquella persona que utiliza su coche todos los días. A través de una plataforma digital ponemos en contacto a conductores y pasajeros para que puedan compartir sus trayectos en vehículo.</p>
-							<button type="button" className="btn btn-primary btn-lg mb-2">
+							<Link type="button" className="btn btn-primary btn-lg mb-2" to="/nosotros">
 								Más información
-							</button>
+							</Link>
 						</div>
 						<img className="img-fluid w-50 d-none d-lg-flex d-xl-flex" src="https://i.imgur.com/GkiluHM.jpg" alt="" />
 					</div>

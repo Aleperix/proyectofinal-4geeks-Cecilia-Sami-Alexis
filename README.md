@@ -1,6 +1,6 @@
 ### Sandra
 
-`GitHub:` https://github.com/sandramartinezarrieta
+`GitHub:` https://github.com/sandramartinezarrieta  
 `LinkedIn:` https://www.linkedin.com/in/sami-martinez-588679224/
 
 
@@ -11,5 +11,5 @@
 
 ### Alexis
 
-`GitHub:` https://github.com/aleperix
+`GitHub:` https://github.com/aleperix  
 `LinkedIn:` https://www.linkedin.com/in/Aleperix/
